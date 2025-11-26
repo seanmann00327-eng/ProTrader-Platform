@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProTrader Platform - Professional Stock & Options Trading</title>
+    <script src="https://unpkg.com/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <span>ProTrader</span>
+            </div>
+            <div class="nav-links">
+                <a href="#" class="active">Chart</a>
+                <a href="#">Screener</a>
+                <a href="#">Markets</a>
+                <a href="#">News</a>
+            </div>
+        </div>
+        <div class="nav-center">
+            <div class="symbol-search">
+                <i class="fas fa-search"></i>
+                <input type="text" id="symbolInput" placeholder="Search symbol..." value="AAPL">
+                <button id="searchBtn" class="search-btn">Go</button>
+            </div>
+        </div>
+        <div class="nav-right">
+            <div class="market-status">
+                <span class="status-dot open"></span>
+                <span>Market Open</span>
+            </div>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="main-container">
+        <!-- Left Sidebar - Drawing Tools -->
+        <div class="left-sidebar">
+            <div class="tool-group">
+                <button class="tool-btn active" data-tool="crosshair" title="Crosshair">
+                    <i class="fas fa-crosshairs"></i>
+                </button>
+                <button class="tool-btn" data-tool="trendline" title="Trend Line">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <button class="tool-btn" data-tool="horizontal" title="Horizontal Line">
+                    <i class="fas fa-grip-lines"></i>
+                </button>
+                <button class="tool-btn" data-tool="fibonacci" title="Fibonacci">
+                    <i class="fas fa-percentage"></i>
+                </button>
+                <button class="tool-btn" data-tool="rectangle" title="Rectangle">
+                    <i class="far fa-square"></i>
+                </button>
+                <button class="tool-btn" data-tool="text" title="Text">
+                    <i class="fas fa-font"></i>
+                </button>
+            </div>
+            <div class="tool-divider"></div>
+            <div class="tool-group">
+                <button class="tool-btn" data-tool="measure" title="Measure">
+                    <i class="fas fa-ruler"></i>
+                </button>
+                <button class="tool-btn" data-tool="zoom" title="Zoom In">
+                    <i class="fas fa-search-plus"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Chart Area -->
+        <div class="chart-container">
+            <!-- Chart Header -->
+            <div class="chart-header">
+                <div class="symbol-info">
+                    <h2 id="symbolName">AAPL</h2>
+                    <span id="companyName">Apple Inc.</span>
+                    <span id="currentPrice" class="price">$0.00</span>
+                    <span id="priceChange" class="change positive">+0.00 (+0.00%)</span>
+                </div>
+                <div class="chart-controls">
+                    <div class="timeframe-selector">
+                        <button class="tf-btn" data-tf="1">1m</button>
+                        <button class="tf-btn" data-tf="5">5m</button>
+                        <button class="tf-btn" data-tf="15">15m</button>
+                        <button class="tf-btn" data-tf="60">1H</button>
+                        <button class="tf-btn active" data-tf="D">1D</button>
+                        <button class="tf-btn" data-tf="W">1W</button>
+                        <button class="tf-btn" data-tf="M">1M</button>
+                    </div>
+                    <div class="chart-type-selector">
+                        <button class="type-btn active" data-type="candlestick" title="Candlestick">
+                            <i class="fas fa-chart-bar"></i>
+                        </button>
+                        <button class="type-btn" data-type="line" title="Line">
+                            <i class="fas fa-chart-line"></i>
+                        </button>
+                        <button class="type-btn" data-type="area" title="Area">
+                            <i class="fas fa-chart-area"></i>
+                        </button>
+                    </div>
+                    <button class="indicator-btn" id="indicatorBtn">
+                        <i class="fas fa-layer-group"></i>
+                        Indicators
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Chart -->
+            <div id="mainChart" class="chart"></div>
+
+            <!-- Volume Chart -->
+            <div id="volumeChart" class="volume-chart"></div>
+
+            <!-- Indicator Charts -->
+            <div id="rsiChart" class="indicator-chart" style="display: none;"></div>
+            <div id="macdChart" class="indicator-chart" style="display: none;"></div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="right-sidebar">
+            <!-- Tabs -->
+            <div class="sidebar-tabs">
+                <button class="tab-btn active" data-tab="watchlist">Watchlist</button>
+                <button class="tab-btn" data-tab="options">Options</button>
+                <button class="tab-btn" data-tab="alerts">Alerts</button>
+            </div>
+
+            <!-- Watchlist Panel -->
+            <div id="watchlistPanel" class="tab-panel active">
+                <div class="panel-header">
+                    <h3>My Watchlist</h3>
+                    <button class="add-btn" id="addWatchlistBtn">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div id="watchlist" class="watchlist"></div>
+            </div>
+
+            <!-- Options Panel -->
+            <div id="optionsPanel" class="tab-panel">
+                <div class="panel-header">
+                    <h3>Options Chain</h3>
+                    <select id="expirationSelect" class="expiration-select">
+                        <option>Loading...</option>
+                    </select>
+                </div>
+                <div class="options-type-toggle">
+                    <button class="options-toggle active" data-type="calls">Calls</button>
+                    <button class="options-toggle" data-type="puts">Puts</button>
+                </div>
+                <div id="optionsChain" class="options-chain"></div>
+            </div>
+
+            <!-- Alerts Panel -->
+            <div id="alertsPanel" class="tab-panel">
+                <div class="panel-header">
+                    <h3>Price Alerts</h3>
+                    <button class="add-btn" id="addAlertBtn">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div id="alertsList" class="alerts-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Indicator Modal -->
+    <div id="indicatorModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Technical Indicators</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="indicator-list">
+                    <label class="indicator-item">
+                        <input type="checkbox" id="smaToggle"> 
+                        <span>SMA (Simple Moving Average)</span>
+                        <input type="number" id="smaPeriod" value="20" min="1" max="200">
+                    </label>
+                    <label class="indicator-item">
+                        <input type="checkbox" id="emaToggle"> 
+                        <span>EMA (Exponential Moving Average)</span>
+                        <input type="number" id="emaPeriod" value="20" min="1" max="200">
+                    </label>
+                    <label class="indicator-item">
+                        <input type="checkbox" id="bbToggle"> 
+                        <span>Bollinger Bands</span>
+                        <input type="number" id="bbPeriod" value="20" min="1" max="200">
+                    </label>
+                    <label class="indicator-item">
+                        <input type="checkbox" id="rsiToggle"> 
+                        <span>RSI (Relative Strength Index)</span>
+                        <input type="number" id="rsiPeriod" value="14" min="1" max="100">
+                    </label>
+                    <label class="indicator-item">
+                        <input type="checkbox" id="macdToggle"> 
+                        <span>MACD</span>
+                    </label>
+                    <label class="indicator-item">
+                        <input type="checkbox" id="vwapToggle"> 
+                        <span>VWAP</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" id="applyIndicators">Apply</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Modal -->
+    <div id="alertModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create Price Alert</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Symbol</label>
+                    <input type="text" id="alertSymbol" value="AAPL">
+                </div>
+                <div class="form-group">
+                    <label>Condition</label>
+                    <select id="alertCondition">
+                        <option value="above">Price Above</option>
+                        <option value="below">Price Below</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Price</label>
+                    <input type="number" id="alertPrice" step="0.01">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" id="createAlert">Create Alert</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="status-left">
+            <span id="lastUpdate">Last Update: --:--:--</span>
+        </div>
+        <div class="status-center">
+            <span id="ohlcInfo">O: -- H: -- L: -- C: --</span>
+        </div>
+        <div class="status-right">
+            <span id="volumeInfo">Vol: --</span>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/indicators.js"></script>
+    <script src="js/chart.js"></script>
+    <script src="js/watchlist.js"></script>
+    <script src="js/options.js"></script>
+    <script src="js/alerts.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

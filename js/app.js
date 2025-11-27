@@ -42,9 +42,9 @@ class ProTraderApp {
     }
 
     setupEventListeners() {
-        // Symbol search
-        const searchInput = document.getElementById('symbol-search');
-        const searchBtn = document.getElementById('search-btn');
+        // Symbol search - using correct IDs from HTML
+        const searchInput = document.getElementById('symbolInput');
+        const searchBtn = document.getElementById('searchBtn');
         
         if (searchInput) {
             searchInput.addEventListener('keypress', (e) => {
@@ -56,7 +56,8 @@ class ProTraderApp {
         
         if (searchBtn) {
             searchBtn.addEventListener('click', () => {
-                this.searchSymbol(searchInput.value);
+                const input = document.getElementById('symbolInput');
+                if (input) this.searchSymbol(input.value);
             });
         }
         
@@ -75,7 +76,7 @@ class ProTraderApp {
                 document.querySelectorAll('.chart-type-btn').forEach(b => b.classList.remove('active'));
                 e.target.closest('.chart-type-btn').classList.add('active');
                 const chartType = e.target.closest('.chart-type-btn').dataset.type;
-                this.chartManager.setChartType(chartType);
+                if (this.chartManager) this.chartManager.setChartType(chartType);
             });
         });
         
@@ -129,8 +130,11 @@ class ProTraderApp {
             console.log(`Loading data for ${symbol}...`);
             
             // Update UI to show loading state
-            document.getElementById('symbolName').textContent = symbol;
-            document.getElementById('companyName').textContent = 'Loading...';
+            const symbolNameEl = document.getElementById('symbolName');
+            const companyNameEl = document.getElementById('companyName');
+            
+            if (symbolNameEl) symbolNameEl.textContent = symbol;
+            if (companyNameEl) companyNameEl.textContent = 'Loading...';
             
             let quote, candles, profile;
             let useDemoData = false;
@@ -165,14 +169,12 @@ class ProTraderApp {
             this.updateQuoteDisplay(quote);
             
             // Update company name
-            if (profile && profile.name) {
-                document.getElementById('companyName').textContent = profile.name;
-            } else {
-                document.getElementById('companyName').textContent = this.getCompanyName(symbol);
+            if (companyNameEl) {
+                companyNameEl.textContent = (profile && profile.name) ? profile.name : this.getCompanyName(symbol);
             }
             
             // Update chart with candle data
-            if (candles && candles.length > 0) {
+            if (candles && candles.length > 0 && this.chartManager) {
                 this.chartManager.setData(candles);
                 this.reapplyIndicators();
             }
@@ -185,8 +187,9 @@ class ProTraderApp {
             const candles = DemoDataGenerator.generateCandles(365);
             const quote = DemoDataGenerator.generateQuote(candles[candles.length - 1].close);
             this.updateQuoteDisplay(quote);
-            this.chartManager.setData(candles);
-            document.getElementById('companyName').textContent = this.getCompanyName(symbol);
+            if (this.chartManager) this.chartManager.setData(candles);
+            const companyNameEl = document.getElementById('companyName');
+            if (companyNameEl) companyNameEl.textContent = this.getCompanyName(symbol);
         }
     }
     
@@ -269,18 +272,18 @@ class ProTraderApp {
     }
 
     createAlertFromForm() {
-        const symbolInput = document.getElementById('alert-symbol');
-        const conditionSelect = document.getElementById('alert-condition');
-        const priceInput = document.getElementById('alert-price');
-        const noteInput = document.getElementById('alert-note');
+        const symbolInput = document.getElementById('alertSymbol');
+        const conditionSelect = document.getElementById('alertCondition');
+        const priceInput = document.getElementById('alertPrice');
+        const noteInput = document.getElementById('alertNote');
         
-        if (symbolInput && conditionSelect && priceInput) {
+        if (symbolInput && conditionSelect && priceInput && this.alertManager) {
             const symbol = symbolInput.value || this.currentSymbol;
             this.alertManager.createAlert({
                 symbol,
-                conditionSelect.value,
-                priceInput.value,
-                noteInput?.value || ''
+                condition: conditionSelect.value,
+                price: priceInput.value,
+                note: noteInput?.value || ''
             });
             
             // Clear form
@@ -312,7 +315,9 @@ class ProTraderApp {
                 
                 if (quote) {
                     this.updateQuoteDisplay(quote);
-                    this.alertManager.checkAlerts(this.currentSymbol, quote.c);
+                    if (this.alertManager) {
+                        this.alertManager.checkAlerts(this.currentSymbol, quote.c);
+                    }
                 }
             } catch (error) {
                 console.error('Error updating price:', error);

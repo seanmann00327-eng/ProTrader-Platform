@@ -395,9 +395,9 @@ class ProTraderApp {
 }
 
 // Initialize app when DOM is ready
-let app;
+window.app = null;
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Starting ProTrader Pro v2.0...');
-    app = new ProTraderApp();
-    app.init();
+    window.app = new ProTraderApp();
+    window.app.init();
 });

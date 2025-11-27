@@ -10,6 +10,7 @@ class ProTraderApp {
         this.optionsManager = null;
         this.alertManager = null;
         this.activeIndicators = new Set();
+        this.api = new StockAPI();
     }
 
     async init() {
@@ -20,13 +21,13 @@ class ProTraderApp {
         this.watchlistManager = new WatchlistManager();
         this.optionsManager = new OptionsManager();
         this.alertManager = new AlertManager();
-
+        
         // Make managers globally accessible
         window.watchlistManager = this.watchlistManager;
         window.optionsManager = this.optionsManager;
         window.alertManager = this.alertManager;
         window.app = this;
-
+        
         // Setup event listeners
         this.setupEventListeners();
         
@@ -48,195 +49,222 @@ class ProTraderApp {
         if (searchInput) {
             searchInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
-                    this.handleSymbolSearch(searchInput.value);
+                    this.searchSymbol(searchInput.value);
                 }
             });
         }
         
         if (searchBtn) {
             searchBtn.addEventListener('click', () => {
-                this.handleSymbolSearch(searchInput?.value);
+                this.searchSymbol(searchInput.value);
             });
         }
-
+        
         // Timeframe buttons
-        document.querySelectorAll('.timeframe-btn').forEach(btn => {
+        document.querySelectorAll('.tf-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                this.changeTimeframe(e.target.dataset.timeframe);
+                document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                this.changeTimeframe(e.target.dataset.tf);
             });
         });
-
+        
         // Chart type buttons
         document.querySelectorAll('.chart-type-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                this.changeChartType(e.target.dataset.type);
+                document.querySelectorAll('.chart-type-btn').forEach(b => b.classList.remove('active'));
+                e.target.closest('.chart-type-btn').classList.add('active');
+                const chartType = e.target.closest('.chart-type-btn').dataset.type;
+                this.chartManager.setChartType(chartType);
             });
         });
-
-        // Indicator checkboxes
-        document.querySelectorAll('.indicator-checkbox').forEach(checkbox => {
-            checkbox.addEventListener('change', (e) => {
-                this.toggleIndicator(e.target.dataset.indicator, e.target.checked);
+        
+        // Indicator toggles
+        document.querySelectorAll('.indicator-toggle').forEach(toggle => {
+            toggle.addEventListener('change', (e) => {
+                const indicator = e.target.dataset.indicator;
+                if (e.target.checked) {
+                    this.activeIndicators.add(indicator);
+                } else {
+                    this.activeIndicators.delete(indicator);
+                }
+                this.reapplyIndicators();
             });
         });
-
-        // Add to watchlist button
-        const addWatchlistBtn = document.getElementById('add-watchlist-btn');
-        if (addWatchlistBtn) {
-            addWatchlistBtn.addEventListener('click', () => {
-                this.watchlistManager.addSymbol(this.currentSymbol);
-            });
-        }
-
-        // Alert form
-        const alertForm = document.getElementById('alert-form');
-        if (alertForm) {
-            alertForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                this.createAlertFromForm();
-            });
-        }
-
+        
         // Tab switching
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                this.switchTab(e.target.dataset.tab);
+                const tabName = e.target.dataset.tab;
+                this.switchTab(tabName);
             });
         });
+        
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('light-theme');
+            });
+        }
+        
+        // Alert form
+        const createAlertBtn = document.getElementById('createAlert');
+        if (createAlertBtn) {
+            createAlertBtn.addEventListener('click', () => {
+                this.createAlertFromForm();
+            });
+        }
+    }
 
-        // Window resize
-        window.addEventListener('resize', () => {
-            if (this.chartManager) {
-                this.chartManager.resize();
-            }
-        });
+    async searchSymbol(symbol) {
+        if (!symbol) return;
+        symbol = symbol.toUpperCase().trim();
+        this.currentSymbol = symbol;
+        await this.loadSymbolData(symbol);
     }
 
     async loadSymbolData(symbol) {
-        this.currentSymbol = symbol.toUpperCase();
-        this.updateSymbolDisplay();
-
         try {
-            // Get candle data
-            const candles = await StockAPI.getCandles(this.currentSymbol, this.currentTimeframe);
+            console.log(`Loading data for ${symbol}...`);
             
+            // Update UI to show loading state
+            document.getElementById('symbolName').textContent = symbol;
+            document.getElementById('companyName').textContent = 'Loading...';
+            
+            let quote, candles, profile;
+            let useDemoData = false;
+            
+            // Try to get real data from API
+            try {
+                [quote, candles, profile] = await Promise.all([
+                    this.api.getQuote(symbol),
+                    this.api.getHistoricalData(symbol, this.currentTimeframe),
+                    this.api.getCompanyProfile(symbol)
+                ]);
+                
+                // Check if we got valid data
+                if (!candles || candles.length === 0 || !quote || quote.c === 0) {
+                    console.log('API returned empty data, using demo data');
+                    useDemoData = true;
+                }
+            } catch (apiError) {
+                console.log('API error, falling back to demo data:', apiError);
+                useDemoData = true;
+            }
+            
+            // Use demo data if API failed or returned empty
+            if (useDemoData) {
+                console.log('Generating demo data for', symbol);
+                candles = DemoDataGenerator.generateCandles(365);
+                quote = DemoDataGenerator.generateQuote(candles[candles.length - 1].close);
+                profile = { name: this.getCompanyName(symbol) };
+            }
+            
+            // Update price display
+            this.updateQuoteDisplay(quote);
+            
+            // Update company name
+            if (profile && profile.name) {
+                document.getElementById('companyName').textContent = profile.name;
+            } else {
+                document.getElementById('companyName').textContent = this.getCompanyName(symbol);
+            }
+            
+            // Update chart with candle data
             if (candles && candles.length > 0) {
                 this.chartManager.setData(candles);
                 this.reapplyIndicators();
             }
-
-            // Get quote for header
-            const quote = await StockAPI.getQuote(this.currentSymbol);
-            this.updateQuoteDisplay(quote);
-
-            // Check alerts
-            if (quote) {
-                this.alertManager.checkAlerts(this.currentSymbol, quote.c);
-            }
-
-            // Load options chain
-            this.optionsManager.loadOptionsChain(this.currentSymbol);
-
+            
+            console.log(`Data loaded for ${symbol}:`, { quote, candlesCount: candles?.length });
+            
         } catch (error) {
             console.error('Error loading symbol data:', error);
+            // Still show demo data on error
+            const candles = DemoDataGenerator.generateCandles(365);
+            const quote = DemoDataGenerator.generateQuote(candles[candles.length - 1].close);
+            this.updateQuoteDisplay(quote);
+            this.chartManager.setData(candles);
+            document.getElementById('companyName').textContent = this.getCompanyName(symbol);
         }
     }
-
-    updateSymbolDisplay() {
-        const symbolEl = document.getElementById('current-symbol');
-        if (symbolEl) {
-            symbolEl.textContent = this.currentSymbol;
-        }
-        document.title = `${this.currentSymbol} - ProTrader`;
+    
+    getCompanyName(symbol) {
+        const names = {
+            'AAPL': 'Apple Inc.',
+            'MSFT': 'Microsoft Corporation',
+            'GOOGL': 'Alphabet Inc.',
+            'AMZN': 'Amazon.com Inc.',
+            'META': 'Meta Platforms Inc.',
+            'TSLA': 'Tesla Inc.',
+            'NVDA': 'NVIDIA Corporation',
+            'JPM': 'JPMorgan Chase & Co.',
+            'V': 'Visa Inc.',
+            'JNJ': 'Johnson & Johnson'
+        };
+        return names[symbol] || symbol;
     }
 
     updateQuoteDisplay(quote) {
         if (!quote) return;
-
-        const priceEl = document.getElementById('current-price');
-        const changeEl = document.getElementById('price-change');
-
+        
+        const priceEl = document.getElementById('currentPrice');
+        const changeEl = document.getElementById('priceChange');
+        
         if (priceEl) {
-            priceEl.textContent = `$${quote.c.toFixed(2)}`;
+            priceEl.textContent = `$${quote.c?.toFixed(2) || '0.00'}`;
         }
-
+        
         if (changeEl) {
-            const changeSign = quote.d >= 0 ? '+' : '';
-            changeEl.textContent = `${changeSign}${quote.d.toFixed(2)} (${changeSign}${quote.dp.toFixed(2)}%)`;
-            changeEl.className = `price-change ${quote.d >= 0 ? 'positive' : 'negative'}`;
+            const change = quote.d || 0;
+            const changePercent = quote.dp || 0;
+            const isPositive = change >= 0;
+            
+            changeEl.textContent = `${isPositive ? '+' : ''}${change.toFixed(2)} (${isPositive ? '+' : ''}${changePercent.toFixed(2)}%)`;
+            changeEl.className = `change ${isPositive ? 'positive' : 'negative'}`;
         }
     }
 
-    handleSymbolSearch(symbol) {
-        if (symbol && symbol.trim()) {
-            this.changeSymbol(symbol.trim());
-        }
-    }
-
-    changeSymbol(symbol) {
-        this.loadSymbolData(symbol);
-    }
-
-    changeTimeframe(timeframe) {
+    async changeTimeframe(timeframe) {
         this.currentTimeframe = timeframe;
-        
-        // Update active button
-        document.querySelectorAll('.timeframe-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.timeframe === timeframe);
-        });
-        
-        this.loadSymbolData(this.currentSymbol);
-    }
-
-    changeChartType(type) {
-        // Update active button
-        document.querySelectorAll('.chart-type-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.type === type);
-        });
-        
-        this.chartManager.setChartType(type);
-    }
-
-    toggleIndicator(indicator, enabled) {
-        if (enabled) {
-            this.activeIndicators.add(indicator);
-            this.addIndicatorToChart(indicator);
-        } else {
-            this.activeIndicators.delete(indicator);
-            this.chartManager.clearIndicators();
-            this.reapplyIndicators();
-        }
-    }
-
-    addIndicatorToChart(indicator) {
-        const colors = CONFIG.CHART_COLORS;
-        
-        switch (indicator) {
-            case 'sma20':
-                this.chartManager.addSMA(20, colors.sma20);
-                break;
-            case 'sma50':
-                this.chartManager.addSMA(50, colors.sma50);
-                break;
-            case 'ema12':
-                this.chartManager.addEMA(12, colors.ema12);
-                break;
-            case 'ema26':
-                this.chartManager.addEMA(26, colors.ema26);
-                break;
-            case 'bb':
-                this.chartManager.addBollingerBands(20, colors.bollinger);
-                break;
-            case 'vwap':
-                this.chartManager.addVWAP(colors.vwap);
-                break;
-        }
+        await this.loadSymbolData(this.currentSymbol);
     }
 
     reapplyIndicators() {
+        if (!this.chartManager || !this.chartManager.currentData) return;
+        
+        // Clear existing indicators
         this.chartManager.clearIndicators();
+        
+        // Apply active indicators
         this.activeIndicators.forEach(indicator => {
-            this.addIndicatorToChart(indicator);
+            switch(indicator) {
+                case 'sma20':
+                    const sma20 = TechnicalIndicators.SMA(this.chartManager.currentData, 20);
+                    this.chartManager.addIndicatorSeries(sma20, CONFIG.INDICATOR_COLORS.sma);
+                    break;
+                case 'sma50':
+                    const sma50 = TechnicalIndicators.SMA(this.chartManager.currentData, 50);
+                    this.chartManager.addIndicatorSeries(sma50, CONFIG.INDICATOR_COLORS.sma);
+                    break;
+                case 'ema12':
+                    const ema12 = TechnicalIndicators.EMA(this.chartManager.currentData, 12);
+                    this.chartManager.addIndicatorSeries(ema12, CONFIG.INDICATOR_COLORS.ema);
+                    break;
+                case 'ema26':
+                    const ema26 = TechnicalIndicators.EMA(this.chartManager.currentData, 26);
+                    this.chartManager.addIndicatorSeries(ema26, CONFIG.INDICATOR_COLORS.ema);
+                    break;
+                case 'bb':
+                    const bb = TechnicalIndicators.BollingerBands(this.chartManager.currentData, 20);
+                    this.chartManager.addBollingerBands(bb);
+                    break;
+                case 'vwap':
+                    const vwap = TechnicalIndicators.VWAP(this.chartManager.currentData);
+                    this.chartManager.addIndicatorSeries(vwap, CONFIG.INDICATOR_COLORS.vwap);
+                    break;
+            }
         });
     }
 
@@ -245,16 +273,16 @@ class ProTraderApp {
         const conditionSelect = document.getElementById('alert-condition');
         const priceInput = document.getElementById('alert-price');
         const noteInput = document.getElementById('alert-note');
-
+        
         if (symbolInput && conditionSelect && priceInput) {
             const symbol = symbolInput.value || this.currentSymbol;
-            this.alertManager.createAlert(
+            this.alertManager.createAlert({
                 symbol,
                 conditionSelect.value,
                 priceInput.value,
                 noteInput?.value || ''
-            );
-
+            });
+            
             // Clear form
             if (priceInput) priceInput.value = '';
             if (noteInput) noteInput.value = '';
@@ -265,7 +293,7 @@ class ProTraderApp {
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.tab === tabName);
         });
-
+        
         document.querySelectorAll('.tab-content').forEach(content => {
             content.classList.toggle('active', content.id === `${tabName}-tab`);
         });
@@ -274,10 +302,16 @@ class ProTraderApp {
     startPriceUpdates() {
         setInterval(async () => {
             try {
-                const quote = await StockAPI.getQuote(this.currentSymbol);
-                this.updateQuoteDisplay(quote);
+                let quote;
+                try {
+                    quote = await this.api.getQuote(this.currentSymbol);
+                } catch (e) {
+                    // Use demo quote on error
+                    quote = DemoDataGenerator.generateQuote(150 + Math.random() * 50);
+                }
                 
                 if (quote) {
+                    this.updateQuoteDisplay(quote);
                     this.alertManager.checkAlerts(this.currentSymbol, quote.c);
                 }
             } catch (error) {

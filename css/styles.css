@@ -129,7 +129,7 @@ body {
 }
 
 /* Main Layout - CRITICAL: Keep all panels visible */
-.main-container {
+.main-layout {
   display: flex;
   margin-top: var(--top-nav-height);
   height: calc(100vh - var(--top-nav-height));

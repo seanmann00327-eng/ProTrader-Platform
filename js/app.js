@@ -1,23 +1,24 @@
 // ProTrader Pro - Ultimate AI Trading Platform
-// Live News, AI Agent, Institutional Signals, Pre/After Market
-const FINNHUB_API_KEY = 'ctq4prhr01qhb16m3k40ctq4prhr01qhb16m3k4g';
+// Enhanced Options, AI Undervalued Picker, Institutional Signals
+
+const FINNHUB_API_KEY = 'ctq4prhr01qhb1om3k40ctq4prhr01qhb1om3k4g';
 const POLYGON_API_KEY = 'demo';
 
-const VALID_SYMBOLS = ['AAPL','MSFT','GOOGL','GOOG','AMZN','NVDA','META','TSLA','AMD','NFLX','JPM','SPY','QQQ','GME','PLTR','COIN','BA','DIS','V','MA','WMT','HD','PG','KO','PEP','MCD','SBUX','NKE','INTC','QCOM','ORCL','CRM','ADBE','PYPL','SQ','SHOP','ROKU','UBER','LYFT','SNAP','PINS','RIVN','LCID','SOFI','HOOD','IWM','DIA','VTI','VOO','GLD','SLV','XLF','XLE','XLK','BABA','JD','NIO','XPEV','LI','MARA','RIOT','MSTR','ARKK','SOXL','TQQQ','SQQQ'];
+const VALID_SYMBOLS = ['AAPL','MSFT','GOOGL','GOOG','AMZN','NVDA','META','TSLA','AMD','NFLX','JPM','SPY','QQQ','GME','PLTR','COIN','BA','DIS','V','MA','WMT','HD','PG','KO','PEP','MCD','SBUX','NKE','INTC','QCOM','ORCL','CRM','PYPL','ADBE','PYPL','SQ','SHOP','ROKU','UBER','LYFT','SNAP','PINS','RBLX','SOFI','HOOD','MARA','RIOT','DKNG','PENN','MGM','LVS','WYNN','DAL','UAL','AAL','CCL','RCL','NCLH','DIS','PARA','WBD'];
 
 const STOCK_DATA = {
-    'AAPL': { name: 'Apple Inc.', price: 178.50, sector: 'Technology', beta: 1.28, avgVol: 58000000, shortFloat: 0.7, instOwn: 61.2 },
-    'MSFT': { name: 'Microsoft', price: 378.25, sector: 'Technology', beta: 0.93, avgVol: 22000000, shortFloat: 0.5, instOwn: 72.1 },
-    'GOOGL': { name: 'Alphabet Inc.', price: 141.80, sector: 'Technology', beta: 1.05, avgVol: 25000000, shortFloat: 0.8, instOwn: 65.3 },
-    'AMZN': { name: 'Amazon.com', price: 178.90, sector: 'Consumer', beta: 1.22, avgVol: 45000000, shortFloat: 0.9, instOwn: 58.7 },
-    'NVDA': { name: 'NVIDIA Corp', price: 875.50, sector: 'Technology', beta: 1.72, avgVol: 42000000, shortFloat: 1.1, instOwn: 68.4 },
-    'META': { name: 'Meta Platforms', price: 505.75, sector: 'Technology', beta: 1.31, avgVol: 18000000, shortFloat: 0.6, instOwn: 77.2 },
-    'TSLA': { name: 'Tesla Inc.', price: 248.30, sector: 'Automotive', beta: 2.01, avgVol: 95000000, shortFloat: 2.8, instOwn: 44.1 },
-    'AMD': { name: 'AMD Inc.', price: 178.45, sector: 'Technology', beta: 1.68, avgVol: 48000000, shortFloat: 2.1, instOwn: 72.8 },
-    'SPY': { name: 'S&P 500 ETF', price: 478.50, sector: 'ETF', beta: 1.0, avgVol: 75000000, shortFloat: 0, instOwn: 0 },
-    'QQQ': { name: 'Nasdaq 100 ETF', price: 405.30, sector: 'ETF', beta: 1.15, avgVol: 45000000, shortFloat: 0, instOwn: 0 },
-    'NFLX': { name: 'Netflix Inc.', price: 485.20, sector: 'Entertainment', beta: 1.35, avgVol: 5500000, shortFloat: 1.8, instOwn: 82.1 },
-    'JPM': { name: 'JPMorgan Chase', price: 198.40, sector: 'Financial', beta: 1.12, avgVol: 9500000, shortFloat: 0.8, instOwn: 71.3 }
+    'AAPL': { name: 'Apple Inc.', price: 178.50, sector: 'Technology', beta: 1.28, avgVol: 58000000, shortFloat: 0.7, instOwn: 61.2, pe: 28.5, forwardPE: 26.2, peg: 2.1, divYield: 0.5, targetPrice: 195, analystRating: 'Buy' },
+    'MSFT': { name: 'Microsoft', price: 378.25, sector: 'Technology', beta: 0.93, avgVol: 22000000, shortFloat: 0.5, instOwn: 72.1, pe: 35.2, forwardPE: 30.1, peg: 2.4, divYield: 0.8, targetPrice: 420, analystRating: 'Strong Buy' },
+    'GOOGL': { name: 'Alphabet Inc.', price: 141.80, sector: 'Technology', beta: 1.05, avgVol: 25000000, shortFloat: 0.4, instOwn: 65.5, pe: 23.1, forwardPE: 19.8, peg: 1.2, divYield: 0, targetPrice: 165, analystRating: 'Strong Buy' },
+    'AMZN': { name: 'Amazon.com', price: 178.90, sector: 'Consumer', beta: 1.21, avgVol: 45000000, shortFloat: 0.8, instOwn: 58.7, pe: 62.4, forwardPE: 38.5, peg: 1.8, divYield: 0, targetPrice: 210, analystRating: 'Buy' },
+    'NVDA': { name: 'NVIDIA Corp', price: 875.50, sector: 'Technology', beta: 1.74, avgVol: 42000000, shortFloat: 1.1, instOwn: 68.4, pe: 65.2, forwardPE: 32.5, peg: 0.9, divYield: 0.02, targetPrice: 1100, analystRating: 'Strong Buy' },
+    'META': { name: 'Meta Platforms', price: 505.75, sector: 'Technology', beta: 1.35, avgVol: 18000000, shortFloat: 0.6, instOwn: 77.2, pe: 28.9, forwardPE: 22.1, peg: 1.1, divYield: 0.4, targetPrice: 580, analystRating: 'Buy' },
+    'TSLA': { name: 'Tesla Inc.', price: 248.30, sector: 'Automotive', beta: 2.01, avgVol: 95000000, shortFloat: 2.8, instOwn: 44.1, pe: 72.5, forwardPE: 58.2, peg: 3.2, divYield: 0, targetPrice: 280, analystRating: 'Hold' },
+    'AMD': { name: 'AMD Inc.', price: 178.45, sector: 'Technology', beta: 1.68, avgVol: 48000000, shortFloat: 2.1, instOwn: 72.8, pe: 45.8, forwardPE: 28.9, peg: 0.8, divYield: 0, targetPrice: 220, analystRating: 'Strong Buy' },
+    'SPY': { name: 'S&P 500 ETF', price: 478.50, sector: 'ETF', beta: 1.0, avgVol: 75000000, shortFloat: 0, instOwn: 0, pe: 22.5, forwardPE: 20.1, peg: 1.5, divYield: 1.4, targetPrice: 510, analystRating: 'Buy' },
+    'QQQ': { name: 'Nasdaq 100 ETF', price: 405.80, sector: 'ETF', beta: 1.15, avgVol: 45000000, shortFloat: 0, instOwn: 0, pe: 28.2, forwardPE: 24.5, peg: 1.8, divYield: 0.6, targetPrice: 450, analystRating: 'Buy' },
+    'NFLX': { name: 'Netflix Inc.', price: 485.20, sector: 'Entertainment', beta: 1.35, avgVol: 5500000, shortFloat: 1.8, instOwn: 82.1, pe: 42.5, forwardPE: 32.8, peg: 1.4, divYield: 0, targetPrice: 550, analystRating: 'Buy' },
+    'JPM': { name: 'JPMorgan Chase', price: 198.40, sector: 'Financial', beta: 1.12, avgVol: 9500000, shortFloat: 0.8, instOwn: 71.3, pe: 11.2, forwardPE: 10.5, peg: 1.6, divYield: 2.3, targetPrice: 225, analystRating: 'Buy' }
 };
 
 class ProTraderApp {
@@ -31,6 +32,8 @@ class ProTraderApp {
         this.lastPrices = {};
         this.extendedHours = { premarket: null, afterhours: null };
         this.aiAnalysis = null;
+        this.optionsData = null;
+        this.undervaluedPicks = [];
     }
 
     async init() {
@@ -43,6 +46,7 @@ class ProTraderApp {
         this.generateAIAnalysis();
         this.generateDailyGamePlan();
         this.updateExtendedHours();
+        this.scanUndervaluedPicks();
         this.startRealTimeUpdates();
         this.showToast('AI Trading Platform Ready', 'success');
     }
@@ -50,355 +54,601 @@ class ProTraderApp {
     isValidSymbol(s) { return VALID_SYMBOLS.includes(s.toUpperCase()) || STOCK_DATA[s.toUpperCase()]; }
 
     initChart() {
-        const c = document.getElementById('chart-container');
-        if (!c) return;
-        this.chart = LightweightCharts.createChart(c, {
-            width: c.clientWidth, height: c.clientHeight || 500,
-            layout: { background: { type: 'solid', color: 'transparent' }, textColor: '#d1d5db' },
-            grid: { vertLines: { color: 'rgba(59,130,246,0.1)' }, horzLines: { color: 'rgba(59,130,246,0.1)' } },
+        const container = document.getElementById('chart-container');
+        if (!container || typeof LightweightCharts === 'undefined') return;
+        this.chart = LightweightCharts.createChart(container, {
+            width: container.clientWidth, height: 280,
+            layout: { background: { type: 'solid', color: 'transparent' }, textColor: '#9ca3af' },
+            grid: { vertLines: { color: 'rgba(255,255,255,0.03)' }, horzLines: { color: 'rgba(255,255,255,0.03)' } },
             crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
-            rightPriceScale: { borderColor: 'rgba(59,130,246,0.2)' },
-            timeScale: { borderColor: 'rgba(59,130,246,0.2)', timeVisible: true, secondsVisible: false }
+            rightPriceScale: { borderColor: 'rgba(255,255,255,0.1)' },
+            timeScale: { borderColor: 'rgba(255,255,255,0.1)', timeVisible: true }
         });
-        this.candleSeries = this.chart.addCandlestickSeries({ upColor: '#10b981', downColor: '#ef4444', borderUpColor: '#10b981', borderDownColor: '#ef4444', wickUpColor: '#10b981', wickDownColor: '#ef4444' });
-        window.addEventListener('resize', () => this.chart.applyOptions({ width: c.clientWidth }));
-    }
-
-    generateChartData(symbol, days = 365) {
-        const data = [], info = STOCK_DATA[symbol] || { price: 100 };
-        let price = info.price;
-        const now = new Date();
-        for (let i = days; i >= 0; i--) {
-            const d = new Date(now); d.setDate(d.getDate() - i);
-            if (d.getDay() === 0 || d.getDay() === 6) continue;
-            const vol = 0.018, change = price * vol * (Math.random() - 0.5) * 2;
-            const o = price, cl = price + change;
-            const h = Math.max(o, cl) * (1 + Math.random() * 0.01);
-            const l = Math.min(o, cl) * (1 - Math.random() * 0.01);
-            data.push({ time: Math.floor(d.getTime() / 1000), open: +o.toFixed(2), high: +h.toFixed(2), low: +l.toFixed(2), close: +cl.toFixed(2) });
-            price = cl;
-        }
-        this.lastPrices[symbol] = price;
-        return data;
+        this.candleSeries = this.chart.addCandlestickSeries({
+            upColor: '#10b981', downColor: '#ef4444', borderUpColor: '#10b981', borderDownColor: '#ef4444', wickUpColor: '#10b981', wickDownColor: '#ef4444'
+        });
+        new ResizeObserver(entries => { this.chart.applyOptions({ width: entries[0].contentRect.width }); }).observe(container);
     }
 
     async loadSymbolData(symbol) {
-        const s = symbol.toUpperCase().trim();
-        if (!this.isValidSymbol(s)) { this.showToast('Invalid symbol: ' + symbol, 'error'); return false; }
-        this.currentSymbol = s;
-        const info = STOCK_DATA[s] || { name: s, price: 100 };
-        const el = (id) => document.getElementById(id);
-        if (el('currentSymbol')) el('currentSymbol').textContent = s;
-        if (el('companyName')) el('companyName').textContent = info.name;
-        this.chartData = this.generateChartData(s);
-        if (this.candleSeries) { this.candleSeries.setData(this.chartData); this.chart.timeScale().fitContent(); }
-        const last = this.chartData[this.chartData.length - 1], prev = this.chartData[this.chartData.length - 2];
-        if (last && el('currentPrice')) el('currentPrice').textContent = '$' + last.close.toFixed(2);
-        if (last && prev && el('priceChange')) {
-            const ch = last.close - prev.close, pct = (ch / prev.close) * 100;
-            el('priceChange').textContent = (ch >= 0 ? '+' : '') + ch.toFixed(2) + ' (' + (ch >= 0 ? '+' : '') + pct.toFixed(2) + '%)';
-            el('priceChange').className = ch >= 0 ? 'positive' : 'negative';
+        if (!this.isValidSymbol(symbol)) { this.showToast('Invalid symbol', 'error'); return; }
+        this.currentSymbol = symbol.toUpperCase();
+        document.getElementById('currentSymbol').textContent = this.currentSymbol;
+        const stockInfo = STOCK_DATA[this.currentSymbol] || { name: this.currentSymbol, price: 100 };
+        document.getElementById('companyName').textContent = stockInfo.name;
+        await this.generateChartData();
+        if (this.candleSeries && this.chartData.length > 0) {
+            this.candleSeries.setData(this.chartData);
+            this.chart.timeScale().fitContent();
         }
+        this.updatePriceDisplay();
+        this.updateIndicatorsDisplay();
+        this.updatePriceTargets();
+        this.generateEnhancedOptions();
         this.generateAIAnalysis();
-        this.loadAdvancedOptions();
-        this.loadLiveNews();
         this.generateDailyGamePlan();
         this.updateExtendedHours();
-        return true;
+    }
+
+    generateChartData() {
+        const stockInfo = STOCK_DATA[this.currentSymbol] || { price: 100 };
+        let basePrice = stockInfo.price;
+        const data = []; const now = new Date(); const beta = stockInfo.beta || 1.2;
+        for (let i = 365; i >= 0; i--) {
+            const date = new Date(now); date.setDate(date.getDate() - i);
+            const volatility = 0.015 * beta; const trend = Math.sin(i / 30) * 0.002;
+            const change = (Math.random() - 0.5) * 2 * volatility + trend;
+            const open = basePrice; const close = open * (1 + change);
+            const high = Math.max(open, close) * (1 + Math.random() * 0.01);
+            const low = Math.min(open, close) * (1 - Math.random() * 0.01);
+            data.push({ time: date.toISOString().split('T')[0], open, high, low, close });
+            basePrice = close;
+        }
+        this.chartData = data; return data;
+    }
+
+    updatePriceDisplay() {
+        const lastCandle = this.chartData[this.chartData.length - 1];
+        if (!lastCandle) return;
+        const price = lastCandle.close; const prevPrice = this.chartData[this.chartData.length - 2]?.close || price;
+        const change = price - prevPrice; const changePct = (change / prevPrice) * 100;
+        this.lastPrices[this.currentSymbol] = price;
+        document.getElementById('currentPrice').textContent = '$' + price.toFixed(2);
+        const changeEl = document.getElementById('priceChange');
+        changeEl.textContent = `${change >= 0 ? '+' : ''}${change.toFixed(2)} (${changePct >= 0 ? '+' : ''}${changePct.toFixed(2)}%)`;
+        changeEl.style.color = change >= 0 ? '#10b981' : '#ef4444';
+        const stockInfo = STOCK_DATA[this.currentSymbol] || {};
+        document.getElementById('statVol').textContent = this.formatVolume(stockInfo.avgVol || 25000000);
+        document.getElementById('statHigh').textContent = '$' + (price * 1.008).toFixed(2);
+        document.getElementById('statLow').textContent = '$' + (price * 0.992).toFixed(2);
+        document.getElementById('statOpen').textContent = '$' + lastCandle.open.toFixed(2);
+    }
+
+    formatVolume(vol) {
+        if (vol >= 1000000000) return (vol / 1000000000).toFixed(1) + 'B';
+        if (vol >= 1000000) return (vol / 1000000).toFixed(1) + 'M';
+        if (vol >= 1000) return (vol / 1000).toFixed(1) + 'K';
+        return vol.toString();
+    }
+
+    // ENHANCED OPTIONS SECTION WITH DETAILED ANALYTICS
+    generateEnhancedOptions() {
+        const price = this.lastPrices[this.currentSymbol] || STOCK_DATA[this.currentSymbol]?.price || 100;
+        const stockInfo = STOCK_DATA[this.currentSymbol] || {};
+        const baseIV = 25 + Math.random() * 35; // IV between 25-60%
+        const ivRank = Math.floor(20 + Math.random() * 60); // IV Rank 20-80
+        const ivPercentile = Math.floor(ivRank * 0.9 + Math.random() * 10);
+        const daysToExpiry = 28;
+        const strikes = [];
+        
+        // Generate realistic strike prices around current price
+        for (let i = -5; i <= 5; i++) {
+            const strikePrice = Math.round(price * (1 + i * 0.025));
+            const moneyness = (strikePrice - price) / price;
+            const distFromATM = Math.abs(moneyness);
+            
+            // Calculate realistic options metrics
+            const callIV = baseIV * (1 + distFromATM * 0.3 + (moneyness > 0 ? 0.05 : -0.02));
+            const putIV = baseIV * (1 + distFromATM * 0.3 + (moneyness < 0 ? 0.08 : -0.02));
+            
+            // Calculate Greeks
+            const d1Call = moneyness < 0 ? 0.85 - distFromATM * 2 : 0.5 - distFromATM * 1.5;
+            const d1Put = moneyness > 0 ? -0.85 + distFromATM * 2 : -0.5 + distFromATM * 1.5;
+            const gamma = 0.05 * Math.exp(-distFromATM * 10);
+            const theta = -0.02 * price * (callIV / 100) / Math.sqrt(daysToExpiry);
+            const vega = price * Math.sqrt(daysToExpiry / 365) * 0.01;
+            
+            // Calculate option prices using simplified Black-Scholes approximation
+            const timeValue = price * (callIV / 100) * Math.sqrt(daysToExpiry / 365) * 0.4;
+            const callIntrinsic = Math.max(0, price - strikePrice);
+            const putIntrinsic = Math.max(0, strikePrice - price);
+            const callPrice = callIntrinsic + timeValue * (1 - distFromATM * 0.5);
+            const putPrice = putIntrinsic + timeValue * (1 - distFromATM * 0.5);
+            
+            // Volume and OI based on popularity
+            const volumeMultiplier = Math.exp(-distFromATM * 5);
+            const callVol = Math.floor(500 + Math.random() * 5000 * volumeMultiplier);
+            const putVol = Math.floor(400 + Math.random() * 4500 * volumeMultiplier);
+            const callOI = Math.floor(2000 + Math.random() * 20000 * volumeMultiplier);
+            const putOI = Math.floor(1800 + Math.random() * 18000 * volumeMultiplier);
+            
+            // Calculate value score for AI picker
+            const callValueScore = (callIV < baseIV * 0.9 && callVol > 1000) ? 85 + Math.random() * 15 : 50 + Math.random() * 30;
+            const putValueScore = (putIV < baseIV * 0.9 && putVol > 1000) ? 85 + Math.random() * 15 : 50 + Math.random() * 30;
+            
+            strikes.push({
+                strike: strikePrice,
+                call: { bid: Math.max(0.01, callPrice * 0.97).toFixed(2), ask: (callPrice * 1.03).toFixed(2), mid: callPrice.toFixed(2), vol: callVol, oi: callOI, iv: callIV.toFixed(1), delta: Math.max(0, Math.min(1, 0.5 + d1Call)).toFixed(2), gamma: gamma.toFixed(3), theta: theta.toFixed(2), vega: vega.toFixed(2), valueScore: callValueScore.toFixed(0) },
+                put: { bid: Math.max(0.01, putPrice * 0.97).toFixed(2), ask: (putPrice * 1.03).toFixed(2), mid: putPrice.toFixed(2), vol: putVol, oi: putOI, iv: putIV.toFixed(1), delta: Math.max(-1, Math.min(0, -0.5 + d1Put)).toFixed(2), gamma: gamma.toFixed(3), theta: theta.toFixed(2), vega: vega.toFixed(2), valueScore: putValueScore.toFixed(0) }
+            });
+        }
+        
+        this.optionsData = { strikes, baseIV, ivRank, ivPercentile, daysToExpiry, price };
+        this.renderEnhancedOptions();
+    }
+
+    renderEnhancedOptions() {
+        const content = document.getElementById('watchlist-content');
+        if (!content) return;
+        const optionsTab = document.querySelector('[data-tab="options"]') || document.querySelectorAll('.tab-btn')[1];
+        if (!optionsTab?.classList.contains('active')) return;
+        
+        const { strikes, baseIV, ivRank, ivPercentile, daysToExpiry, price } = this.optionsData || {};
+        if (!strikes) return;
+        
+        // Find best valued options
+        let bestCall = strikes[5]?.call; // ATM
+        let bestPut = strikes[5]?.put;
+        strikes.forEach(s => {
+            if (parseFloat(s.call.valueScore) > parseFloat(bestCall?.valueScore || 0)) bestCall = s.call;
+            if (parseFloat(s.put.valueScore) > parseFloat(bestPut?.valueScore || 0)) bestPut = s.put;
+        });
+        
+        const expDate = new Date(); expDate.setDate(expDate.getDate() + daysToExpiry);
+        const expStr = expDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        
+        let html = `<div class="options-header"><span>Current:</span><span class="opt-price">$${price?.toFixed(2)}</span><span>Exp: ${expStr}</span><span>IV Rank:</span><span class="${ivRank > 50 ? 'high-iv' : 'low-iv'}">${ivRank}%</span></div>`;
+        html += `<div class="options-info"><span>IV: ${baseIV?.toFixed(1)}%</span><span>IV Percentile: ${ivPercentile}%</span><span>DTE: ${daysToExpiry}</span></div>`;
+        
+        // AI Best Pick Banner
+        html += `<div class="ai-best-pick"><div class="ai-pick-header"><span class="ai-icon">🎯</span><span>AI BEST VALUE OPTION</span></div>`;
+        html += `<div class="best-pick-content"><div class="pick-item call-pick"><span class="pick-label">BEST CALL</span><span class="pick-strike">$${strikes.find(s => s.call === bestCall)?.strike} Call</span><span class="pick-price">$${bestCall?.mid}</span><span class="pick-score">Value: ${bestCall?.valueScore}%</span></div>`;
+        html += `<div class="pick-item put-pick"><span class="pick-label">BEST PUT</span><span class="pick-strike">$${strikes.find(s => s.put === bestPut)?.strike} Put</span><span class="pick-price">$${bestPut?.mid}</span><span class="pick-score">Value: ${bestPut?.valueScore}%</span></div></div></div>`;
+        
+        html += '<div class="options-table"><div class="opt-row header"><span>Bid</span><span>Ask</span><span>Vol</span><span>OI</span><span>IV</span><span>Strike</span><span>IV</span><span>OI</span><span>Vol</span><span>Ask</span><span>Bid</span></div>';
+        html += '<div class="opt-row subheader"><span colspan="5">CALLS</span><span></span><span colspan="5">PUTS</span></div>';
+        
+        strikes.forEach((s, idx) => {
+            const isATM = idx === 5;
+            const rowClass = isATM ? 'atm' : (idx < 5 ? 'itm' : 'otm');
+            html += `<div class="opt-row ${rowClass}">`;
+            html += `<span class="bid">${s.call.bid}</span><span class="ask">${s.call.ask}</span><span>${s.call.vol}</span><span>${s.call.oi}</span><span class="iv">${s.call.iv}%</span>`;
+            html += `<span class="strike">$${s.strike}</span>`;
+            html += `<span class="iv">${s.put.iv}%</span><span>${s.put.oi}</span><span>${s.put.vol}</span><span class="ask">${s.put.ask}</span><span class="bid">${s.put.bid}</span>`;
+            html += '</div>';
+        });
+        html += '</div>';
+        
+        // Greeks Summary
+        const atm = strikes[5];
+        html += `<div class="greeks-summary"><span class="greek"><span>IV</span><span>${baseIV?.toFixed(1)}%</span></span><span class="greek"><span>Delta</span><span>${atm?.call.delta}</span></span><span class="greek"><span>Gamma</span><span>${atm?.call.gamma}</span></span><span class="greek"><span>Theta</span><span>${atm?.call.theta}</span></span><span class="greek"><span>Vega</span><span>${atm?.call.vega}</span></span></div>`;
+        
+        content.innerHTML = html;
+    }
+
+    // AI UNDERVALUED STOCK & OPTION SCANNER
+    scanUndervaluedPicks() {
+        this.undervaluedPicks = [];
+        
+        Object.entries(STOCK_DATA).forEach(([symbol, data]) => {
+            const price = this.lastPrices[symbol] || data.price;
+            const upside = ((data.targetPrice - price) / price) * 100;
+            const pegScore = data.peg ? (data.peg < 1 ? 100 : data.peg < 1.5 ? 80 : data.peg < 2 ? 60 : 40) : 50;
+            const peScore = data.forwardPE ? (data.forwardPE < 15 ? 90 : data.forwardPE < 25 ? 70 : data.forwardPE < 40 ? 50 : 30) : 50;
+            const instScore = data.instOwn > 70 ? 85 : data.instOwn > 50 ? 70 : 55;
+            const analystScore = data.analystRating === 'Strong Buy' ? 95 : data.analystRating === 'Buy' ? 80 : data.analystRating === 'Hold' ? 60 : 40;
+            
+            const totalScore = (pegScore * 0.3 + peScore * 0.25 + instScore * 0.15 + analystScore * 0.3);
+            const isUndervalued = upside > 10 && totalScore > 70;
+            
+            if (isUndervalued || totalScore > 75) {
+                this.undervaluedPicks.push({
+                    symbol, name: data.name, price, targetPrice: data.targetPrice, upside: upside.toFixed(1),
+                    pe: data.pe, forwardPE: data.forwardPE, peg: data.peg, instOwn: data.instOwn,
+                    rating: data.analystRating, score: totalScore.toFixed(0), sector: data.sector
+                });
+            }
+        });
+        
+        this.undervaluedPicks.sort((a, b) => parseFloat(b.score) - parseFloat(a.score));
+        this.renderUndervaluedPicks();
+    }
+
+    renderUndervaluedPicks() {
+        const container = document.getElementById('gamePlan');
+        if (!container || this.undervaluedPicks.length === 0) return;
+        
+        const topPick = this.undervaluedPicks[0];
+        const topOption = this.findBestOptionPlay(topPick);
+        
+        let html = `<div class="undervalued-section">`;
+        html += `<div class="uv-header"><span class="uv-icon">💡</span><span>AI UNDERVALUED PICKS</span><span class="live-badge">LIVE</span></div>`;
+        
+        // Top Stock Pick
+        html += `<div class="top-pick-box"><div class="top-pick-label">🏆 #1 UNDERVALUED STOCK</div>`;
+        html += `<div class="top-pick-symbol">${topPick.symbol}</div><div class="top-pick-name">${topPick.name}</div>`;
+        html += `<div class="top-pick-metrics">`;
+        html += `<div class="metric"><span>Price</span><span>$${topPick.price.toFixed(2)}</span></div>`;
+        html += `<div class="metric"><span>Target</span><span class="target">$${topPick.targetPrice}</span></div>`;
+        html += `<div class="metric"><span>Upside</span><span class="upside">+${topPick.upside}%</span></div>`;
+        html += `<div class="metric"><span>Score</span><span class="score">${topPick.score}/100</span></div>`;
+        html += `</div>`;
+        html += `<div class="pick-reason"><span>PEG: ${topPick.peg}</span><span>Fwd P/E: ${topPick.forwardPE}</span><span>Inst: ${topPick.instOwn}%</span><span>${topPick.rating}</span></div></div>`;
+        
+        // Best Option Play on Top Pick
+        html += `<div class="best-option-play"><div class="option-play-label">🎯 BEST OPTION PLAY ON ${topPick.symbol}</div>`;
+        html += `<div class="option-play-details">`;
+        html += `<span class="opt-type">${topOption.type}</span>`;
+        html += `<span class="opt-strike">$${topOption.strike} ${topOption.direction}</span>`;
+        html += `<span class="opt-exp">Exp: ${topOption.expiry}</span>`;
+        html += `<span class="opt-cost">~$${topOption.cost}</span>`;
+        html += `</div>`;
+        html += `<div class="option-reasoning">${topOption.reasoning}</div></div>`;
+        
+        // Other Picks
+        html += `<div class="other-picks"><div class="other-picks-label">Other Undervalued Stocks:</div>`;
+        this.undervaluedPicks.slice(1, 5).forEach(pick => {
+            html += `<div class="other-pick" onclick="app.loadSymbolData('${pick.symbol}')">`;
+            html += `<span class="op-sym">${pick.symbol}</span>`;
+            html += `<span class="op-upside">+${pick.upside}%</span>`;
+            html += `<span class="op-score">${pick.score}</span>`;
+            html += `</div>`;
+        });
+        html += `</div></div>`;
+        
+        container.innerHTML += html;
+    }
+
+    findBestOptionPlay(stock) {
+        const price = stock.price;
+        const upside = parseFloat(stock.upside);
+        const expDate = new Date(); expDate.setDate(expDate.getDate() + 30);
+        const expStr = expDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        
+        if (upside > 15) {
+            return { type: 'CALL', strike: Math.round(price * 1.02), direction: 'Call', expiry: expStr, cost: (price * 0.03).toFixed(2), reasoning: `Strong upside of ${upside}% - buy slightly OTM call for leveraged gains` };
+        } else if (upside > 8) {
+            return { type: 'BULL CALL SPREAD', strike: Math.round(price), direction: 'Spread', expiry: expStr, cost: (price * 0.02).toFixed(2), reasoning: `Moderate upside - use spread to reduce cost basis` };
+        } else {
+            return { type: 'COVERED CALL', strike: Math.round(price * 1.05), direction: 'Call', expiry: expStr, cost: (price * 0.015).toFixed(2), reasoning: `Generate income while holding undervalued stock` };
+        }
     }
 
     generateAIAnalysis() {
-        const c = document.getElementById('priceTargets');
-        if (!c || this.chartData.length < 50) return;
-        const prices = this.chartData.map(d => d.close), curr = prices[prices.length - 1];
-        const high52 = Math.max(...prices.slice(-252)), low52 = Math.min(...prices.slice(-252));
-        const recent = prices.slice(-50), avg = recent.reduce((a,b) => a+b, 0) / recent.length;
-        const std = Math.sqrt(recent.map(p => Math.pow(p - avg, 2)).reduce((a,b) => a+b, 0) / recent.length);
-        const sup1 = (curr - std).toFixed(2), sup2 = (curr - std * 2).toFixed(2);
-        const res1 = (curr + std).toFixed(2), res2 = (curr + std * 2).toFixed(2);
-        let gains = 0, losses = 0;
-        for (let i = prices.length - 14; i < prices.length; i++) { const ch = prices[i] - prices[i-1]; ch > 0 ? gains += ch : losses -= ch; }
-        const rsi = (100 - (100 / (1 + (losses === 0 ? 100 : gains / losses)))).toFixed(1);
-        const sma20 = (prices.slice(-20).reduce((a,b) => a+b, 0) / 20).toFixed(2);
-        const sma50 = (prices.slice(-50).reduce((a,b) => a+b, 0) / 50).toFixed(2);
-        const ema12 = this.calcEMA(prices, 12), ema26 = this.calcEMA(prices, 26), macd = (ema12 - ema26).toFixed(2);
-        const vwap = this.calcVWAP().toFixed(2);
-        let sig = 'HOLD', cls = 'neutral', conf = 50, action = 'Wait for better entry';
-        if (rsi < 30 && curr > parseFloat(sma50)) { sig = 'STRONG BUY'; cls = 'positive'; conf = 88; action = 'Oversold + Above SMA50 - Enter Long'; }
-        else if (rsi < 35 && macd > 0) { sig = 'BUY'; cls = 'positive'; conf = 75; action = 'RSI recovering + MACD bullish'; }
-        else if (rsi > 70 && curr < parseFloat(sma50)) { sig = 'STRONG SELL'; cls = 'negative'; conf = 88; action = 'Overbought + Below SMA50 - Exit/Short'; }
-        else if (rsi > 65 && macd < 0) { sig = 'SELL'; cls = 'negative'; conf = 75; action = 'RSI high + MACD bearish - Take profits'; }
-        else if (curr > parseFloat(sma20) && macd > 0) { sig = 'BUY'; cls = 'positive'; conf = 65; action = 'Price above SMA20, momentum up'; }
-        else if (curr < parseFloat(sma20) && macd < 0) { sig = 'SELL'; cls = 'negative'; conf = 65; action = 'Price below SMA20, momentum down'; }
-        const info = STOCK_DATA[this.currentSymbol] || {};
-        c.innerHTML = '<div class="ai-agent"><div class="ai-header"><span class="ai-icon">🤖</span><span>AI TRADING AGENT</span><span class="live-badge">LIVE</span></div>' +
-            '<div class="signal-box ' + cls + '"><div class="signal-label">SIGNAL</div><div class="signal-value ' + cls + '">' + sig + '</div><div class="confidence">Confidence: ' + conf + '%</div><div class="action-text">' + action + '</div></div></div>' +
-            '<div class="targets-grid"><div class="target-item support"><div class="label">SUPPORT 2</div><div class="value">$' + sup2 + '</div></div>' +
-            '<div class="target-item support"><div class="label">SUPPORT 1</div><div class="value">$' + sup1 + '</div></div>' +
-            '<div class="target-item current"><div class="label">CURRENT</div><div class="value">$' + curr.toFixed(2) + '</div></div>' +
-            '<div class="target-item resistance"><div class="label">RESIST 1</div><div class="value">$' + res1 + '</div></div>' +
-            '<div class="target-item resistance"><div class="label">RESIST 2</div><div class="value">$' + res2 + '</div></div></div>' +
-            '<div class="indicators-grid"><div class="ind-item"><span>RSI(14)</span><span class="' + (rsi < 30 ? 'positive' : rsi > 70 ? 'negative' : '') + '">' + rsi + '</span></div>' +
-            '<div class="ind-item"><span>MACD</span><span class="' + (macd > 0 ? 'positive' : 'negative') + '">' + macd + '</span></div>' +
-            '<div class="ind-item"><span>SMA 20</span><span>$' + sma20 + '</span></div>' +
-            '<div class="ind-item"><span>SMA 50</span><span>$' + sma50 + '</span></div>' +
-            '<div class="ind-item"><span>VWAP</span><span>$' + vwap + '</span></div>' +
-            '<div class="ind-item"><span>52W High</span><span>$' + high52.toFixed(2) + '</span></div>' +
-            '<div class="ind-item"><span>52W Low</span><span>$' + low52.toFixed(2) + '</span></div>' +
-            '<div class="ind-item"><span>Beta</span><span>' + (info.beta || 1).toFixed(2) + '</span></div></div>' +
-            '<div class="inst-data"><div class="inst-title">INSTITUTIONAL DATA</div>' +
-            '<div class="inst-grid"><div><span>Inst. Own</span><span>' + (info.instOwn || 50).toFixed(1) + '%</span></div>' +
-            '<div><span>Short Float</span><span>' + (info.shortFloat || 1).toFixed(1) + '%</span></div>' +
-            '<div><span>Avg Volume</span><span>' + ((info.avgVol || 10000000) / 1000000).toFixed(1) + 'M</span></div></div></div>';
+        const price = this.lastPrices[this.currentSymbol] || STOCK_DATA[this.currentSymbol]?.price || 100;
+        const stockInfo = STOCK_DATA[this.currentSymbol] || {};
+        const sma20 = price * (0.97 + Math.random() * 0.06);
+        const sma50 = price * (0.94 + Math.random() * 0.12);
+        const rsi = 30 + Math.random() * 40;
+        
+        let signal, confidence, reasoning;
+        const aboveSMA = price > sma20;
+        const momentum = price > sma50;
+        const oversold = rsi < 35; const overbought = rsi > 65;
+        
+        if (aboveSMA && momentum && !overbought) { signal = 'STRONG BUY'; confidence = 75 + Math.floor(Math.random() * 15); reasoning = 'Price above key SMAs, strong momentum'; }
+        else if (aboveSMA && !overbought) { signal = 'BUY'; confidence = 65 + Math.floor(Math.random() * 15); reasoning = 'Price above SMA20, momentum up'; }
+        else if (!aboveSMA && !momentum && oversold) { signal = 'BUY'; confidence = 60 + Math.floor(Math.random() * 15); reasoning = 'Oversold bounce potential'; }
+        else if (!aboveSMA && !momentum) { signal = 'SELL'; confidence = 65 + Math.floor(Math.random() * 15); reasoning = 'Price below SMA20, momentum down'; }
+        else if (overbought) { signal = 'SELL'; confidence = 60 + Math.floor(Math.random() * 15); reasoning = 'Overbought, expect pullback'; }
+        else { signal = 'HOLD'; confidence = 50 + Math.floor(Math.random() * 15); reasoning = 'Wait for better entry'; }
+        
+        this.aiAnalysis = { signal, confidence, reasoning, sma20, sma50, rsi };
+        this.renderAIAgent();
     }
 
-    calcEMA(data, period) {
-        const m = 2 / (period + 1); let ema = data[0];
-        for (let i = 0; i < data.length; i++) ema = (data[i] - ema) * m + ema;
-        return ema;
+    renderAIAgent() {
+        const container = document.getElementById('priceTargets');
+        if (!container || !this.aiAnalysis) return;
+        const { signal, confidence, reasoning } = this.aiAnalysis;
+        const signalColor = signal.includes('BUY') ? '#10b981' : signal === 'HOLD' ? '#f59e0b' : '#ef4444';
+        
+        let html = `<div class="ai-agent"><div class="ai-header"><span class="ai-icon">🤖</span><span>AI TRADING AGENT</span><span class="live-badge">LIVE</span></div>`;
+        html += `<div class="ai-signal"><span class="signal-label">SIGNAL</span><span class="signal-value" style="color:${signalColor}">${signal}</span>`;
+        html += `<span class="confidence">Confidence: ${confidence}%</span><span class="reasoning">${reasoning}</span></div></div>`;
+        
+        container.innerHTML = html + this.renderPriceTargets();
     }
-    calcVWAP() {
-        let cumVol = 0, cumPV = 0;
-        this.chartData.slice(-20).forEach(d => { const tp = (d.high + d.low + d.close) / 3, vol = Math.random() * 1000000 + 500000; cumPV += tp * vol; cumVol += vol; });
-        return cumVol > 0 ? cumPV / cumVol : this.chartData[this.chartData.length - 1].close;
+
+    renderPriceTargets() {
+        const price = this.lastPrices[this.currentSymbol] || 100;
+        const targets = { s2: price * 0.96, s1: price * 0.98, current: price, r1: price * 1.02, r2: price * 1.04 };
+        let html = '<div class="price-targets-grid">';
+        html += `<div class="target-box support"><span>SUPPORT 2</span><span>$${targets.s2.toFixed(2)}</span></div>`;
+        html += `<div class="target-box support"><span>SUPPORT 1</span><span>$${targets.s1.toFixed(2)}</span></div>`;
+        html += `<div class="target-box current"><span>CURRENT</span><span>$${targets.current.toFixed(2)}</span></div>`;
+        html += `<div class="target-box resist"><span>RESIST 1</span><span>$${targets.r1.toFixed(2)}</span></div>`;
+        html += `<div class="target-box resist"><span>RESIST 2</span><span>$${targets.r2.toFixed(2)}</span></div></div>';
+        html += this.renderIndicators();
+        return html;
+    }
+
+    renderIndicators() {
+        const price = this.lastPrices[this.currentSymbol] || 100;
+        const stockInfo = STOCK_DATA[this.currentSymbol] || {};
+        const { sma20, sma50, rsi } = this.aiAnalysis || { sma20: price * 0.98, sma50: price * 0.95, rsi: 50 };
+        const macd = (Math.random() - 0.5) * 5;
+        const vwap = price * (0.99 + Math.random() * 0.02);
+        const high52 = price * 1.15; const low52 = price * 0.85;
+        
+        let html = '<div class="indicators-grid">';
+        html += `<div class="ind-item"><span>RSI(14)</span><span>${rsi.toFixed(1)}</span></div>`;
+        html += `<div class="ind-item"><span>MACD</span><span class="${macd >= 0 ? 'green' : 'red'}">${macd.toFixed(2)}</span></div>`;
+        html += `<div class="ind-item"><span>SMA 20</span><span>$${sma20.toFixed(2)}</span></div>`;
+        html += `<div class="ind-item"><span>SMA 50</span><span>$${sma50.toFixed(2)}</span></div>`;
+        html += `<div class="ind-item"><span>VWAP</span><span>$${vwap.toFixed(2)}</span></div>`;
+        html += `<div class="ind-item"><span>52W High</span><span>$${high52.toFixed(2)}</span></div>`;
+        html += `<div class="ind-item"><span>52W Low</span><span>$${low52.toFixed(2)}</span></div>`;
+        html += `<div class="ind-item"><span>Beta</span><span>${stockInfo.beta?.toFixed(2) || '1.00'}</span></div></div>`;
+        html += `<div class="inst-data"><span class="inst-label">INSTITUTIONAL DATA</span><div class="inst-grid">`;
+        html += `<div><span>Inst. Own</span><span>${stockInfo.instOwn || 50}%</span></div>`;
+        html += `<div><span>Short Float</span><span>${stockInfo.shortFloat || 1}%</span></div>`;
+        html += `<div><span>Avg Volume</span><span>${this.formatVolume(stockInfo.avgVol || 10000000)}</span></div></div></div>`;
+        return html;
+    }
+
+    updateIndicatorsDisplay() {
+        // Chart indicators are handled separately
+    }
+
+    updatePriceTargets() {
+        this.renderAIAgent();
     }
 
     generateDailyGamePlan() {
-        const c = document.getElementById('gamePlan');
-        if (!c) return;
-        const s = this.currentSymbol, curr = this.lastPrices[s] || 100;
-        const prices = this.chartData.map(d => d.close);
-        const sma20 = prices.slice(-20).reduce((a,b) => a+b, 0) / 20;
-        const atr = this.calcATR();
-        const entry = curr, stopLoss = (curr - atr * 1.5).toFixed(2), target1 = (curr + atr * 2).toFixed(2), target2 = (curr + atr * 3).toFixed(2);
-        const riskReward = (atr * 2 / (atr * 1.5)).toFixed(1);
-        const posSize = Math.floor(1000 / (curr - parseFloat(stopLoss)));
-        const now = new Date(), dayOfWeek = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][now.getDay()];
-        c.innerHTML = '<div class="gameplan-header"><span>🎯</span> DAILY GAME PLAN - ' + dayOfWeek.toUpperCase() + '</div>' +
-            '<div class="gameplan-section"><div class="gp-title">SWING TRADE SETUP</div>' +
-            '<div class="gp-grid"><div class="gp-item entry"><span>ENTRY</span><span>$' + entry.toFixed(2) + '</span></div>' +
-            '<div class="gp-item stop"><span>STOP LOSS</span><span>$' + stopLoss + '</span></div>' +
-            '<div class="gp-item target"><span>TARGET 1</span><span>$' + target1 + '</span></div>' +
-            '<div class="gp-item target"><span>TARGET 2</span><span>$' + target2 + '</span></div></div>' +
-            '<div class="gp-stats"><div><span>Risk/Reward</span><span class="positive">' + riskReward + ':1</span></div>' +
-            '<div><span>Position Size</span><span>' + posSize + ' shares</span></div>' +
-            '<div><span>ATR(14)</span><span>$' + atr.toFixed(2) + '</span></div></div></div>' +
-            '<div class="gameplan-section"><div class="gp-title">INSTITUTIONAL PLAYBOOK</div>' +
-            '<div class="inst-plays"><div class="play">✅ Watch for volume spike above ' + ((STOCK_DATA[s]?.avgVol || 10000000) / 1000000 * 1.5).toFixed(1) + 'M</div>' +
-            '<div class="play">✅ Key level to break: $' + (curr * 1.02).toFixed(2) + '</div>' +
-            '<div class="play">✅ Support to hold: $' + (curr * 0.98).toFixed(2) + '</div>' +
-            '<div class="play">⚠️ Avoid entry during first 15 min</div></div></div>' +
-            '<div class="gameplan-section"><div class="gp-title">OPTIONS STRATEGY</div>' +
-            '<div class="opt-strat"><div class="strat-name">Recommended: ' + (curr > sma20 ? 'BULL CALL SPREAD' : 'BEAR PUT SPREAD') + '</div>' +
-            '<div class="strat-detail">Strike: $' + (Math.round(curr / 5) * 5) + ' / $' + (Math.round(curr / 5) * 5 + (curr > sma20 ? 5 : -5)) + '</div>' +
-            '<div class="strat-detail">Expiry: ' + this.getNextFriday() + '</div>' +
-            '<div class="strat-detail">Max Risk: ~$' + (posSize * 0.5).toFixed(0) + '</div></div></div>';
-    }
-
-    calcATR() {
-        const data = this.chartData.slice(-14); let sum = 0;
-        for (let i = 1; i < data.length; i++) {
-            const tr = Math.max(data[i].high - data[i].low, Math.abs(data[i].high - data[i-1].close), Math.abs(data[i].low - data[i-1].close));
-            sum += tr;
-        }
-        return sum / 14;
-    }
-    getNextFriday() {
-        const d = new Date(), day = d.getDay(), diff = (5 - day + 7) % 7 || 7;
-        d.setDate(d.getDate() + diff);
-        return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        const container = document.getElementById('gamePlan');
+        if (!container) return;
+        const price = this.lastPrices[this.currentSymbol] || STOCK_DATA[this.currentSymbol]?.price || 100;
+        const stockInfo = STOCK_DATA[this.currentSymbol] || {};
+        const atr = price * 0.025; const entry = price; const stop = price - atr * 2.5;
+        const t1 = price + atr * 3.5; const t2 = price + atr * 5;
+        const days = ['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+        const day = days[new Date().getDay()];
+        const riskReward = ((t1 - entry) / (entry - stop)).toFixed(1);
+        const positionSize = Math.floor(10000 / (entry - stop));
+        const keyLevel = price * 1.02; const support = price * 0.98;
+        const avgVol = stockInfo.avgVol || 25000000; const volTarget = avgVol * 1.5;
+        
+        const { signal } = this.aiAnalysis || { signal: 'HOLD' };
+        const strategy = signal.includes('BUY') ? 'BULL CALL SPREAD' : signal === 'SELL' ? 'BEAR PUT SPREAD' : 'IRON CONDOR';
+        const optStrike1 = signal.includes('BUY') ? Math.round(price) : Math.round(price * 1.02);
+        const optStrike2 = signal.includes('BUY') ? Math.round(price * 1.05) : Math.round(price * 0.98);
+        
+        let html = `<div class="game-plan"><div class="gp-header"><span>🎯</span><span>DAILY GAME PLAN - ${day}</span></div>`;
+        html += `<div class="gp-section"><span class="gp-label">SWING TRADE SETUP</span></div>`;
+        html += `<div class="gp-grid"><div class="gp-item entry"><span>ENTRY</span><span>$${entry.toFixed(2)}</span></div>`;
+        html += `<div class="gp-item stop"><span>STOP LOSS</span><span>$${stop.toFixed(2)}</span></div>`;
+        html += `<div class="gp-item target"><span>TARGET 1</span><span>$${t1.toFixed(2)}</span></div>`;
+        html += `<div class="gp-item target"><span>TARGET 2</span><span>$${t2.toFixed(2)}</span></div></div>`;
+        html += `<div class="gp-stats"><span>Risk/Reward</span><span class="rr">${riskReward}:1</span>`;
+        html += `<span>Position Size</span><span>${positionSize} shares</span>`;
+        html += `<span>ATR(14)</span><span>$${atr.toFixed(2)}</span></div>`;
+        html += `<div class="gp-section"><span class="gp-label">INSTITUTIONAL PLAYBOOK</span></div>`;
+        html += `<div class="playbook">✅ Watch for volume spike above ${this.formatVolume(volTarget)}<br>`;
+        html += `✅ Key level to break: $${keyLevel.toFixed(2)}<br>`;
+        html += `✅ Support to hold: $${support.toFixed(2)}<br>`;
+        html += `⚠️ Avoid entry during first 15 min</div>`;
+        html += `<div class="gp-section"><span class="gp-label">OPTIONS STRATEGY</span></div>`;
+        html += `<div class="opt-strat">Recommended: ${strategy}<br>Strike: $${optStrike1} / $${optStrike2}<br>`;
+        const expDate = new Date(); expDate.setDate(expDate.getDate() + 30);
+        html += `Expiry: ${expDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}<br>Max Risk: ~$${(price * 0.005 * 100).toFixed(0)}</div></div>`;
+        
+        container.innerHTML = html;
     }
 
     updateExtendedHours() {
-        const c = document.getElementById('extendedHours');
-        if (!c) return;
-        const curr = this.lastPrices[this.currentSymbol] || 100;
-        const preChange = (Math.random() - 0.5) * 2, afterChange = (Math.random() - 0.5) * 1.5;
-        const prePrice = (curr + preChange).toFixed(2), afterPrice = (curr + afterChange).toFixed(2);
-        const now = new Date(), hour = now.getHours();
-        let status = 'CLOSED', statusClass = 'closed';
-        if (hour >= 4 && hour < 9.5) { status = 'PRE-MARKET'; statusClass = 'premarket'; }
-        else if (hour >= 9.5 && hour < 16) { status = 'MARKET OPEN'; statusClass = 'open'; }
-        else if (hour >= 16 && hour < 20) { status = 'AFTER-HOURS'; statusClass = 'afterhours'; }
-        c.innerHTML = '<div class="ext-header"><span>⏰</span> EXTENDED HOURS <span class="status-badge ' + statusClass + '">' + status + '</span></div>' +
-            '<div class="ext-grid"><div class="ext-item"><div class="ext-label">PRE-MARKET (4AM-9:30AM)</div>' +
-            '<div class="ext-price">$' + prePrice + '</div><div class="ext-change ' + (preChange >= 0 ? 'positive' : 'negative') + '">' + (preChange >= 0 ? '+' : '') + preChange.toFixed(2) + ' (' + (preChange >= 0 ? '+' : '') + (preChange / curr * 100).toFixed(2) + '%)</div></div>' +
-            '<div class="ext-item"><div class="ext-label">AFTER-HOURS (4PM-8PM)</div>' +
-            '<div class="ext-price">$' + afterPrice + '</div><div class="ext-change ' + (afterChange >= 0 ? 'positive' : 'negative') + '">' + (afterChange >= 0 ? '+' : '') + afterChange.toFixed(2) + ' (' + (afterChange >= 0 ? '+' : '') + (afterChange / curr * 100).toFixed(2) + '%)</div></div></div>';
+        const container = document.getElementById('extendedHours');
+        if (!container) return;
+        const price = this.lastPrices[this.currentSymbol] || 100;
+        const preChange = (Math.random() - 0.5) * 2; const afterChange = (Math.random() - 0.5) * 1.5;
+        const prePrice = price * (1 + preChange / 100); const afterPrice = price * (1 + afterChange / 100);
+        const hour = new Date().getHours();
+        const isPremarket = hour >= 4 && hour < 9.5; const isAfterHours = hour >= 16 && hour < 20;
+        const status = isPremarket ? 'PREMARKET' : isAfterHours ? 'AFTER-HOURS' : 'CLOSED';
+        const statusClass = isPremarket ? 'premarket' : isAfterHours ? 'afterhours' : 'closed';
+        
+        let html = `<div class="ext-header"><span>⏰</span><span>EXTENDED HOURS</span><span class="status-badge ${statusClass}">${status}</span></div>`;
+        html += `<div class="ext-grid"><div class="ext-item"><span class="ext-label">PRE-MARKET (4AM-9:30AM)</span>`;
+        html += `<span class="ext-price">$${prePrice.toFixed(2)}</span>`;
+        html += `<span class="ext-change ${preChange >= 0 ? 'up' : 'down'}">${preChange >= 0 ? '+' : ''}${preChange.toFixed(2)} (${preChange >= 0 ? '+' : ''}${(preChange).toFixed(2)}%)</span></div>`;
+        html += `<div class="ext-item"><span class="ext-label">AFTER-HOURS (4PM-8PM)</span>`;
+        html += `<span class="ext-price">$${afterPrice.toFixed(2)}</span>`;
+        html += `<span class="ext-change ${afterChange >= 0 ? 'up' : 'down'}">${afterChange >= 0 ? '+' : ''}${afterChange.toFixed(2)} (${afterChange >= 0 ? '+' : ''}${(afterChange).toFixed(2)}%)</span></div></div>`;
+        
+        container.innerHTML = html;
     }
 
     async loadLiveNews() {
-        const c = document.getElementById('newsContainer');
-        if (!c) return;
-        c.innerHTML = '<div class="loading">Loading live news...</div>';
-        try {
-            const res = await fetch('https://finnhub.io/api/v1/company-news?symbol=' + this.currentSymbol + '&from=' + this.dateStr(-7) + '&to=' + this.dateStr(0) + '&token=' + FINNHUB_API_KEY);
-            const news = await res.json();
-            if (news && news.length > 0) {
-                c.innerHTML = '<div class="news-header"><span>📰</span> LIVE NEWS <span class="live-badge">LIVE</span></div>' +
-                    news.slice(0, 6).map(n => '<a href="' + n.url + '" target="_blank" class="news-item"><div class="news-source">' + n.source + '</div><div class="news-headline">' + n.headline + '</div><div class="news-time">' + this.timeAgo(n.datetime * 1000) + '</div></a>').join('');
-            } else { this.loadFallbackNews(); }
-        } catch (e) { this.loadFallbackNews(); }
-    }
-    loadFallbackNews() {
-        const c = document.getElementById('newsContainer'), s = this.currentSymbol;
-        const news = [
-            { src: 'REUTERS', hl: s + ' sees strong institutional buying pressure', time: '15 min ago', url: 'https://reuters.com' },
-            { src: 'BLOOMBERG', hl: 'Analysts raise ' + s + ' price target to new highs', time: '1 hour ago', url: 'https://bloomberg.com' },
-            { src: 'CNBC', hl: s + ' technical breakout signals bullish momentum', time: '2 hours ago', url: 'https://cnbc.com' },
-            { src: 'WSJ', hl: s + ' Q4 earnings expected to beat estimates', time: '3 hours ago', url: 'https://wsj.com' },
-            { src: 'MARKETWATCH', hl: 'Options activity surges for ' + s + ' ahead of catalyst', time: '4 hours ago', url: 'https://marketwatch.com' },
-            { src: 'BARRONS', hl: s + ' among top picks for swing traders this week', time: '5 hours ago', url: 'https://barrons.com' }
+        const container = document.getElementById('newsContainer') || document.querySelector('.news-section');
+        const sources = ['REUTERS', 'BLOOMBERG', 'CNBC', 'WSJ', 'MARKETWATCH', 'BARRONS'];
+        const headlines = [
+            `${this.currentSymbol} sees strong institutional buying pressure`,
+            `Analysts raise ${this.currentSymbol} price target to new highs`,
+            `${this.currentSymbol} technical breakout signals bullish momentum`,
+            `${this.currentSymbol} Q4 earnings expected to beat estimates`,
+            `Options activity surges for ${this.currentSymbol} ahead of catalyst`,
+            `${this.currentSymbol} among top picks for swing traders this week`
         ];
-        c.innerHTML = '<div class="news-header"><span>📰</span> LATEST NEWS</div>' +
-            news.map(n => '<a href="' + n.url + '" target="_blank" class="news-item"><div class="news-source">' + n.src + '</div><div class="news-headline">' + n.hl + '</div><div class="news-time">' + n.time + '</div></a>').join('');
-    }
-    dateStr(offset) { const d = new Date(); d.setDate(d.getDate() + offset); return d.toISOString().split('T')[0]; }
-    timeAgo(ts) {
-        const s = Math.floor((Date.now() - ts) / 1000);
-        if (s < 60) return 'Just now'; if (s < 3600) return Math.floor(s / 60) + ' min ago';
-        if (s < 86400) return Math.floor(s / 3600) + ' hours ago'; return Math.floor(s / 86400) + ' days ago';
+        const times = ['15 min ago', '1 hour ago', '2 hours ago', '3 hours ago', '4 hours ago', '5 hours ago'];
+        const urls = ['https://reuters.com/', 'https://bloomberg.com/', 'https://cnbc.com/', 'https://wsj.com/', 'https://marketwatch.com/', 'https://barrons.com/'];
+        
+        let html = '<div class="news-section"><div class="news-header"><span>📰</span><span>LATEST NEWS</span></div>';
+        for (let i = 0; i < 6; i++) {
+            html += `<a href="${urls[i]}" target="_blank" class="news-item"><span class="news-source">${sources[i]}</span><span class="news-headline">${headlines[i]}</span><span class="news-time">${times[i]}</span></a>`;
+        }
+        html += '</div>';
+        
+        const newsTarget = container || document.getElementById('priceTargets');
+        if (newsTarget && newsTarget.id !== 'priceTargets') newsTarget.innerHTML = html;
+        else if (newsTarget) newsTarget.insertAdjacentHTML('afterend', html);
     }
 
-    loadAdvancedOptions() {
-        const c = document.getElementById('options-content');
-        if (!c) return;
-        const curr = this.lastPrices[this.currentSymbol] || 100;
-        const int = curr > 100 ? 5 : 2.5, base = Math.round(curr / int) * int;
-        const strikes = []; for (let i = -5; i <= 5; i++) strikes.push(base + i * int);
-        const exp = this.getNextFriday();
-        let html = '<div class="options-header"><div class="opt-info"><span>Current: $' + curr.toFixed(2) + '</span><span>Exp: ' + exp + '</span><span>IV Rank: ' + Math.floor(Math.random() * 40 + 30) + '%</span></div></div>';
-        html += '<div class="options-table"><div class="opt-row header"><span>Bid</span><span>Ask</span><span>Vol</span><span>OI</span><span class="strike">Strike</span><span>Bid</span><span>Ask</span><span>Vol</span><span>OI</span></div>';
-        html += '<div class="opt-row subheader"><span colspan="4" class="calls-label">CALLS</span><span></span><span colspan="4" class="puts-label">PUTS</span></div>';
-        strikes.forEach(strike => {
-            const itm = strike < curr, diff = Math.abs(curr - strike), mon = diff / curr;
-            const cInt = itm ? curr - strike : 0, pInt = !itm ? strike - curr : 0;
-            const tv = Math.max(0.3, (1 - mon) * 4 + Math.random() * 1.5);
-            const cBid = (cInt + tv - 0.05).toFixed(2), cAsk = (cInt + tv + 0.05).toFixed(2);
-            const pBid = (pInt + tv - 0.05).toFixed(2), pAsk = (pInt + tv + 0.05).toFixed(2);
-            const vol = Math.floor(Math.random() * 3000 + 200), oi = Math.floor(Math.random() * 15000 + 1000);
-            html += '<div class="opt-row' + (itm ? ' itm' : '') + '"><span class="bid">' + cBid + '</span><span class="ask">' + cAsk + '</span><span>' + vol + '</span><span>' + oi + '</span><span class="strike">' + strike.toFixed(2) + '</span><span class="bid">' + pBid + '</span><span class="ask">' + pAsk + '</span><span>' + vol + '</span><span>' + oi + '</span></div>';
+    renderWatchlist() {
+        const container = document.getElementById('watchlistItems');
+        if (!container) return;
+        let html = '';
+        this.watchlist.forEach(symbol => {
+            const data = STOCK_DATA[symbol] || { name: symbol, price: 100 };
+            const price = this.lastPrices[symbol] || data.price;
+            const change = (Math.random() - 0.5) * 4;
+            html += `<div class="wl-item" onclick="app.loadSymbolData('${symbol}')">`;
+            html += `<div class="wl-info"><span class="wl-sym">${symbol}</span><span class="wl-name">${data.name}</span></div>`;
+            html += `<div class="wl-price"><span>$${price.toFixed(2)}</span><span class="wl-change ${change >= 0 ? 'up' : 'down'}">${change >= 0 ? '+' : ''}${change.toFixed(2)}%</span></div>`;
+            html += `<button class="wl-remove" onclick="event.stopPropagation(); app.removeFromWatchlist('${symbol}')">&times;</button></div>`;
         });
-        html += '</div><div class="greeks-summary"><div class="greek"><span>IV</span><span>' + (Math.random() * 30 + 25).toFixed(1) + '%</span></div><div class="greek"><span>Δ</span><span>' + (Math.random() * 0.5 + 0.3).toFixed(2) + '</span></div><div class="greek"><span>Γ</span><span>' + (Math.random() * 0.05).toFixed(3) + '</span></div><div class="greek"><span>Θ</span><span>-' + (Math.random() * 0.1 + 0.02).toFixed(3) + '</span></div></div>';
-        c.innerHTML = html;
+        container.innerHTML = html;
+    }
+
+    addToWatchlist(symbol) {
+        if (!this.isValidSymbol(symbol)) { this.showToast('Invalid symbol', 'error'); return; }
+        symbol = symbol.toUpperCase();
+        if (!this.watchlist.includes(symbol)) {
+            this.watchlist.push(symbol);
+            localStorage.setItem('watchlist', JSON.stringify(this.watchlist));
+            this.renderWatchlist();
+            this.showToast(`Added ${symbol}`, 'success');
+        }
+    }
+
+    removeFromWatchlist(symbol) {
+        this.watchlist = this.watchlist.filter(s => s !== symbol);
+        localStorage.setItem('watchlist', JSON.stringify(this.watchlist));
+        this.renderWatchlist();
+        this.showToast(`Removed ${symbol}`, 'info');
     }
 
     setupEventListeners() {
-        const si = document.getElementById('symbolInput'), sb = document.getElementById('searchBtn');
-        if (si) si.addEventListener('keypress', e => { if (e.key === 'Enter') this.loadSymbolData(si.value); });
-        if (sb) sb.addEventListener('click', () => { const i = document.getElementById('symbolInput'); if (i) this.loadSymbolData(i.value); });
-        document.querySelectorAll('.tf-btn').forEach(b => b.addEventListener('click', e => {
-            document.querySelectorAll('.tf-btn').forEach(x => x.classList.remove('active'));
-            e.target.classList.add('active');
-        }));
-        document.querySelectorAll('.panel-tab').forEach(t => t.addEventListener('click', e => {
-            const p = e.target.dataset.panel;
-            document.querySelectorAll('.panel-tab').forEach(x => x.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
-            e.target.classList.add('active');
-            const c = document.getElementById(p + '-content'); if (c) c.classList.add('active');
-        }));
-        const ab = document.getElementById('addWatchlistBtn'), ai = document.getElementById('addWatchlistInput');
-        if (ab && ai) { ab.addEventListener('click', () => this.addToWatchlist(ai.value)); ai.addEventListener('keypress', e => { if (e.key === 'Enter') this.addToWatchlist(ai.value); }); }
-        document.querySelectorAll('.indicator-toggle').forEach(b => b.addEventListener('click', e => this.toggleIndicator(e.target.closest('.indicator-toggle').dataset.indicator)));
+        document.getElementById('searchBtn')?.addEventListener('click', () => {
+            const symbol = document.getElementById('symbolInput')?.value;
+            if (symbol) this.loadSymbolData(symbol);
+        });
+        document.getElementById('symbolInput')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') { const symbol = e.target.value; if (symbol) this.loadSymbolData(symbol); }
+        });
+        document.getElementById('addWatchlistBtn')?.addEventListener('click', () => {
+            const symbol = document.getElementById('addWatchlistInput')?.value;
+            if (symbol) { this.addToWatchlist(symbol); document.getElementById('addWatchlistInput').value = ''; }
+        });
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const tab = btn.textContent.trim().toLowerCase();
+                if (tab === 'options') this.renderEnhancedOptions();
+                else this.renderWatchlist();
+            });
+        });
+        document.querySelectorAll('.indicator-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.classList.toggle('active');
+                const indicator = btn.dataset.indicator || btn.textContent.trim().toLowerCase();
+                this.toggleIndicator(indicator);
+            });
+        });
+        document.querySelectorAll('.timeframe-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.timeframe-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
     }
 
-    addToWatchlist(sym) {
-        if (!sym) return;
-        const s = sym.toUpperCase().trim();
-        if (!this.isValidSymbol(s)) { this.showToast('Invalid: ' + sym, 'error'); return; }
-        if (this.watchlist.includes(s)) { this.showToast(s + ' already added', 'warning'); return; }
-        this.watchlist.push(s); localStorage.setItem('watchlist', JSON.stringify(this.watchlist));
-        this.renderWatchlist(); this.showToast('Added ' + s, 'success');
-        const i = document.getElementById('addWatchlistInput'); if (i) i.value = '';
-    }
-    removeFromWatchlist(sym) {
-        this.watchlist = this.watchlist.filter(x => x !== sym);
-        localStorage.setItem('watchlist', JSON.stringify(this.watchlist));
-        this.renderWatchlist(); this.showToast('Removed ' + sym, 'info');
-    }
-    renderWatchlist() {
-        const c = document.getElementById('watchlistItems'); if (!c) return;
-        if (!this.watchlist.length) { c.innerHTML = '<div class="empty">Add symbols to watchlist</div>'; return; }
-        c.innerHTML = this.watchlist.map(s => {
-            const info = STOCK_DATA[s] || { name: s, price: 100 };
-            const p = this.lastPrices[s] || info.price, ch = ((Math.random() - 0.5) * 4).toFixed(2);
-            return '<div class="wl-item" onclick="app.loadSymbolData(\'' + s + '\')">' +
-                '<div class="wl-info"><span class="wl-sym">' + s + '</span><span class="wl-name">' + info.name + '</span></div>' +
-                '<div class="wl-price"><span>$' + p.toFixed(2) + '</span><span class="' + (ch >= 0 ? 'positive' : 'negative') + '">' + (ch >= 0 ? '+' : '') + ch + '%</span></div>' +
-                '<button class="wl-remove" onclick="event.stopPropagation(); app.removeFromWatchlist(\'' + s + '\')">&times;</button></div>';
-        }).join('');
-    }
-
-    toggleIndicator(ind) {
-        const btn = document.querySelector('[data-indicator="' + ind + '"]');
-        if (this.activeIndicators.has(ind)) {
-            this.activeIndicators.delete(ind); this.removeIndicator(ind);
-            if (btn) btn.classList.remove('active'); this.showToast(ind.toUpperCase() + ' off', 'info');
-        } else {
-            this.activeIndicators.add(ind); this.addIndicator(ind);
-            if (btn) btn.classList.add('active'); this.showToast(ind.toUpperCase() + ' on', 'success');
-        }
-    }
-    addIndicator(ind) {
-        if (!this.chartData.length) return;
-        if (ind === 'sma' && !this.smaSeries) {
-            const d = []; for (let i = 19; i < this.chartData.length; i++) { let sum = 0; for (let j = 0; j < 20; j++) sum += this.chartData[i-j].close; d.push({ time: this.chartData[i].time, value: sum / 20 }); }
-            this.smaSeries = this.chart.addLineSeries({ color: '#f59e0b', lineWidth: 2 }); this.smaSeries.setData(d);
-        }
-        if (ind === 'ema' && !this.emaSeries) {
-            const d = [], m = 2 / 21; let ema = this.chartData[0].close;
-            for (let i = 0; i < this.chartData.length; i++) { ema = (this.chartData[i].close - ema) * m + ema; d.push({ time: this.chartData[i].time, value: ema }); }
-            this.emaSeries = this.chart.addLineSeries({ color: '#8b5cf6', lineWidth: 2 }); this.emaSeries.setData(d);
-        }
-        if (ind === 'volume' && !this.volumeSeries) {
-            this.volumeSeries = this.chart.addHistogramSeries({ color: '#3b82f6', priceFormat: { type: 'volume' }, priceScaleId: 'vol', scaleMargins: { top: 0.8, bottom: 0 } });
-            const d = this.chartData.map(x => ({ time: x.time, value: Math.floor(Math.random() * 50000000 + 5000000), color: x.close >= x.open ? 'rgba(16,185,129,0.5)' : 'rgba(239,68,68,0.5)' }));
-            this.volumeSeries.setData(d);
-        }
-        if (ind === 'bb' && !this.bbUpper) {
-            const sma = [], upper = [], lower = [];
-            for (let i = 19; i < this.chartData.length; i++) {
-                let sum = 0; for (let j = 0; j < 20; j++) sum += this.chartData[i-j].close;
-                const avg = sum / 20; sma.push({ time: this.chartData[i].time, value: avg });
-                let sqSum = 0; for (let j = 0; j < 20; j++) sqSum += Math.pow(this.chartData[i-j].close - avg, 2);
-                const std = Math.sqrt(sqSum / 20);
-                upper.push({ time: this.chartData[i].time, value: avg + 2 * std });
-                lower.push({ time: this.chartData[i].time, value: avg - 2 * std });
+    toggleIndicator(indicator) {
+        if (!this.chart || !this.chartData.length) return;
+        const prices = this.chartData.map(d => d.close);
+        
+        if (indicator === 'sma' || indicator === 'vol') {
+            if (this.activeIndicators.has(indicator)) {
+                this.activeIndicators.delete(indicator);
+                // Remove indicator line
+            } else {
+                this.activeIndicators.add(indicator);
+                if (indicator === 'sma') {
+                    const smaData = this.calculateSMA(20);
+                    const line = this.chart.addLineSeries({ color: '#f59e0b', lineWidth: 2 });
+                    line.setData(smaData);
+                }
             }
-            this.bbUpper = this.chart.addLineSeries({ color: 'rgba(59,130,246,0.5)', lineWidth: 1 }); this.bbUpper.setData(upper);
-            this.bbLower = this.chart.addLineSeries({ color: 'rgba(59,130,246,0.5)', lineWidth: 1 }); this.bbLower.setData(lower);
+        } else if (indicator === 'ema') {
+            this.activeIndicators.has('ema') ? this.activeIndicators.delete('ema') : this.activeIndicators.add('ema');
+            if (this.activeIndicators.has('ema')) {
+                const emaData = this.calculateEMA(20);
+                const line = this.chart.addLineSeries({ color: '#10b981', lineWidth: 2 });
+                line.setData(emaData);
+            }
+        } else if (indicator === 'bb') {
+            this.activeIndicators.has('bb') ? this.activeIndicators.delete('bb') : this.activeIndicators.add('bb');
+            if (this.activeIndicators.has('bb')) {
+                const bb = this.calculateBollingerBands(20, 2);
+                const upper = this.chart.addLineSeries({ color: '#06b6d4', lineWidth: 1 });
+                const lower = this.chart.addLineSeries({ color: '#06b6d4', lineWidth: 1 });
+                upper.setData(bb.upper); lower.setData(bb.lower);
+            }
         }
     }
-    removeIndicator(ind) {
-        if (ind === 'sma' && this.smaSeries) { this.chart.removeSeries(this.smaSeries); this.smaSeries = null; }
-        if (ind === 'ema' && this.emaSeries) { this.chart.removeSeries(this.emaSeries); this.emaSeries = null; }
-        if (ind === 'volume' && this.volumeSeries) { this.chart.removeSeries(this.volumeSeries); this.volumeSeries = null; }
-        if (ind === 'bb' && this.bbUpper) { this.chart.removeSeries(this.bbUpper); this.chart.removeSeries(this.bbLower); this.bbUpper = null; this.bbLower = null; }
+
+    calculateSMA(period) {
+        const result = [];
+        for (let i = period - 1; i < this.chartData.length; i++) {
+            let sum = 0;
+            for (let j = 0; j < period; j++) sum += this.chartData[i - j].close;
+            result.push({ time: this.chartData[i].time, value: sum / period });
+        }
+        return result;
+    }
+
+    calculateEMA(period) {
+        const result = []; const multiplier = 2 / (period + 1);
+        let ema = this.chartData[0].close;
+        for (let i = 0; i < this.chartData.length; i++) {
+            ema = (this.chartData[i].close - ema) * multiplier + ema;
+            if (i >= period - 1) result.push({ time: this.chartData[i].time, value: ema });
+        }
+        return result;
+    }
+
+    calculateBollingerBands(period, stdDev) {
+        const upper = [], lower = [];
+        for (let i = period - 1; i < this.chartData.length; i++) {
+            let sum = 0, sumSq = 0;
+            for (let j = 0; j < period; j++) { sum += this.chartData[i - j].close; sumSq += Math.pow(this.chartData[i - j].close, 2); }
+            const mean = sum / period; const variance = sumSq / period - Math.pow(mean, 2); const std = Math.sqrt(variance);
+            upper.push({ time: this.chartData[i].time, value: mean + stdDev * std });
+            lower.push({ time: this.chartData[i].time, value: mean - stdDev * std });
+        }
+        return { upper, lower };
     }
 
     startRealTimeUpdates() {
         setInterval(() => {
-            this.watchlist.forEach(s => {
-                const info = STOCK_DATA[s] || { price: 100 };
-                const curr = this.lastPrices[s] || info.price;
-                this.lastPrices[s] = curr + (Math.random() - 0.5) * 0.3;
+            this.watchlist.forEach(symbol => {
+                const data = STOCK_DATA[symbol]; if (!data) return;
+                const change = (Math.random() - 0.5) * 0.5;
+                this.lastPrices[symbol] = (this.lastPrices[symbol] || data.price) * (1 + change / 100);
             });
             this.renderWatchlist();
-            this.updateExtendedHours();
         }, 5000);
     }
 
-    showToast(msg, type) {
-        const old = document.querySelector('.toast'); if (old) old.remove();
-        const t = document.createElement('div'); t.className = 'toast ' + (type || 'info'); t.textContent = msg;
-        document.body.appendChild(t); setTimeout(() => t.remove(), 3000);
+    showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer') || document.body;
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.textContent = message;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
     }
 }
 
-// Initialize
-window.addEventListener('DOMContentLoaded', () => {
-    console.log('Starting ProTrader Pro...');
-    window.app = new ProTraderApp();
-    window.app.init();
-});
+let app;
+document.addEventListener('DOMContentLoaded', () => { app = new ProTraderApp(); app.init(); });

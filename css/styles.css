@@ -660,3 +660,310 @@ body {
     .right-panel { width: 100%; }
     .symbol-search { width: 250px; }
 }
+
+
+/* ===== PRICE TARGETS ===== */
+#priceTargets {
+    background: var(--bg-glass);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.signal-box {
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.1));
+}
+
+.signal-box.strong-buy {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1));
+    border: 1px solid var(--accent-green);
+}
+
+.signal-box.buy {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
+    border: 1px solid rgba(16, 185, 129, 0.5);
+}
+
+.signal-box.sell {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05));
+    border: 1px solid rgba(239, 68, 68, 0.5);
+}
+
+.signal-box.strong-sell {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
+    border: 1px solid var(--accent-red);
+}
+
+.signal-box.hold {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
+    border: 1px solid var(--accent-yellow);
+}
+
+.signal-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.signal-value {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.signal-value.positive { color: var(--accent-green); }
+.signal-value.negative { color: var(--accent-red); }
+.signal-value.neutral { color: var(--accent-yellow); }
+
+.confidence {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.targets-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.target-item {
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 15px 10px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+}
+
+.target-item.current {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
+    border-color: var(--accent-blue);
+}
+
+.target-item.resistance {
+    border-top: 2px solid var(--accent-red);
+}
+
+.target-item.support {
+    border-top: 2px solid var(--accent-green);
+}
+
+.target-item .label {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.target-item .value {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.target-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.metric {
+    background: var(--bg-tertiary);
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+}
+
+.metric span:first-child {
+    display: block;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.metric span:last-child {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.metric .positive { color: var(--accent-green); }
+.metric .negative { color: var(--accent-red); }
+
+/* ===== NEWS SECTION ===== */
+#newsContainer {
+    background: var(--bg-glass);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+    border: 1px solid var(--border-color);
+}
+
+#newsContainer h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.news-item {
+    padding: 15px;
+    border-radius: 8px;
+    background: var(--bg-secondary);
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.news-item:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--border-color);
+    transform: translateX(5px);
+}
+
+.news-item:last-child {
+    margin-bottom: 0;
+}
+
+.news-source {
+    font-size: 11px;
+    color: var(--accent-blue);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+}
+
+.news-headline {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.4;
+    margin-bottom: 6px;
+}
+
+.news-time {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.loading {
+    text-align: center;
+    padding: 30px;
+    color: var(--text-muted);
+}
+
+.loading::after {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-top-color: var(--accent-blue);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ===== LIVE BADGE ===== */
+.live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--accent-green);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.live-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--accent-green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* ===== OPTIONS ENHANCEMENTS ===== */
+.options-row.itm {
+    background: rgba(16, 185, 129, 0.1);
+}
+
+.options-row.itm .strike-price {
+    color: var(--accent-green);
+    font-weight: 600;
+}
+
+/* ===== TOAST NOTIFICATIONS ===== */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-size: 14px;
+    z-index: 10000;
+    animation: slideIn 0.3s ease;
+    max-width: 350px;
+    box-shadow: var(--shadow-glow);
+}
+
+.toast.success {
+    border-color: var(--accent-green);
+    background: rgba(16, 185, 129, 0.1);
+}
+
+.toast.error {
+    border-color: var(--accent-red);
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.toast.warning {
+    border-color: var(--accent-yellow);
+    background: rgba(245, 158, 11, 0.1);
+}
+
+.toast.info {
+    border-color: var(--accent-blue);
+    background: rgba(59, 130, 246, 0.1);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}

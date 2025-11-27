@@ -748,6 +748,7 @@ body {
 .modal-overlay.active { display: flex; }
 
 .modal {
+      display: none;
   background: var(--bg-secondary);
   border-radius: 12px;
   width: 90%;
@@ -756,6 +757,8 @@ body {
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
+
+.modal.active { display: flex; }
 
 .modal-header {
   display: flex;

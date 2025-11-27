@@ -11,33 +11,34 @@ class ProTraderApp {
         this.alertManager = null;
         this.activeIndicators = new Set();
         this.api = new StockAPI();
+        this.priceUpdateInterval = null;
     }
 
     async init() {
         console.log('Initializing ProTrader Platform...');
-        
+
         // Initialize managers
         this.chartManager = new ChartManager('chart-container');
         this.watchlistManager = new WatchlistManager();
         this.optionsManager = new OptionsManager();
         this.alertManager = new AlertManager();
-        
+
         // Make managers globally accessible
         window.watchlistManager = this.watchlistManager;
         window.optionsManager = this.optionsManager;
         window.alertManager = this.alertManager;
         window.app = this;
-        
+
         // Setup event listeners
         this.setupEventListeners();
-        
+
         // Load initial data
         await this.loadSymbolData(this.currentSymbol);
-        
+
         // Start auto-updates
         this.watchlistManager.startAutoUpdate();
         this.startPriceUpdates();
-        
+
         console.log('ProTrader Platform initialized successfully!');
     }
 
@@ -45,7 +46,7 @@ class ProTraderApp {
         // Symbol search - using correct IDs from HTML
         const searchInput = document.getElementById('symbolInput');
         const searchBtn = document.getElementById('searchBtn');
-        
+
         if (searchInput) {
             searchInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
@@ -53,23 +54,23 @@ class ProTraderApp {
                 }
             });
         }
-        
+
         if (searchBtn) {
             searchBtn.addEventListener('click', () => {
                 const input = document.getElementById('symbolInput');
                 if (input) this.searchSymbol(input.value);
             });
         }
-        
+
         // Timeframe buttons
         document.querySelectorAll('.tf-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
-                this.changeTimeframe(e.target.dataset.tf);
+                this.changeTimeFrame(e.target.dataset.tf);
             });
         });
-        
+
         // Chart type buttons
         document.querySelectorAll('.chart-type-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -79,7 +80,7 @@ class ProTraderApp {
                 if (this.chartManager) this.chartManager.setChartType(chartType);
             });
         });
-        
+
         // Indicator toggles
         document.querySelectorAll('.indicator-toggle').forEach(toggle => {
             toggle.addEventListener('change', (e) => {
@@ -92,7 +93,7 @@ class ProTraderApp {
                 this.reapplyIndicators();
             });
         });
-        
+
         // Tab switching
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -100,7 +101,7 @@ class ProTraderApp {
                 this.switchTab(tabName);
             });
         });
-        
+
         // Theme toggle
         const themeToggle = document.getElementById('themeToggle');
         if (themeToggle) {
@@ -108,7 +109,7 @@ class ProTraderApp {
                 document.body.classList.toggle('light-theme');
             });
         }
-        
+
         // Alert form
         const createAlertBtn = document.getElementById('createAlert');
         if (createAlertBtn) {
@@ -128,17 +129,17 @@ class ProTraderApp {
     async loadSymbolData(symbol) {
         try {
             console.log(`Loading data for ${symbol}...`);
-            
+
             // Update UI to show loading state
             const symbolNameEl = document.getElementById('symbolName');
             const companyNameEl = document.getElementById('companyName');
-            
+
             if (symbolNameEl) symbolNameEl.textContent = symbol;
             if (companyNameEl) companyNameEl.textContent = 'Loading...';
-            
+
             let quote, candles, profile;
             let useDemoData = false;
-            
+
             // Try to get real data from API
             try {
                 [quote, candles, profile] = await Promise.all([
@@ -146,7 +147,7 @@ class ProTraderApp {
                     this.api.getHistoricalData(symbol, this.currentTimeframe),
                     this.api.getCompanyProfile(symbol)
                 ]);
-                
+
                 // Check if we got valid data
                 if (!candles || candles.length === 0 || !quote || quote.c === 0) {
                     console.log('API returned empty data, using demo data');
@@ -156,43 +157,43 @@ class ProTraderApp {
                 console.log('API error, falling back to demo data:', apiError);
                 useDemoData = true;
             }
-            
+
             // Use demo data if API failed or returned empty
             if (useDemoData) {
                 console.log('Generating demo data for', symbol);
-                candles = DemoDataGenerator.generateCandles(365);
-                quote = DemoDataGenerator.generateQuote(candles[candles.length - 1].close);
-                profile = { name: this.getCompanyName(symbol) };
+                candles = DemoDataGenerator.generateCandles(symbol, 365);
+                quote = DemoDataGenerator.generateQuote(symbol);
+                profile = DemoDataGenerator.generateCompanyProfile(symbol);
             }
-            
+
             // Update price display
             this.updateQuoteDisplay(quote);
-            
+
             // Update company name
             if (companyNameEl) {
                 companyNameEl.textContent = (profile && profile.name) ? profile.name : this.getCompanyName(symbol);
             }
-            
+
             // Update chart with candle data
             if (candles && candles.length > 0 && this.chartManager) {
                 this.chartManager.setData(candles);
                 this.reapplyIndicators();
             }
-            
+
             console.log(`Data loaded for ${symbol}:`, { quote, candlesCount: candles?.length });
-            
+
         } catch (error) {
             console.error('Error loading symbol data:', error);
             // Still show demo data on error
-            const candles = DemoDataGenerator.generateCandles(365);
-            const quote = DemoDataGenerator.generateQuote(candles[candles.length - 1].close);
+            const candles = DemoDataGenerator.generateCandles(symbol, 365);
+            const quote = DemoDataGenerator.generateQuote(symbol);
             this.updateQuoteDisplay(quote);
             if (this.chartManager) this.chartManager.setData(candles);
             const companyNameEl = document.getElementById('companyName');
             if (companyNameEl) companyNameEl.textContent = this.getCompanyName(symbol);
         }
     }
-    
+
     getCompanyName(symbol) {
         const names = {
             'AAPL': 'Apple Inc.',
@@ -211,35 +212,35 @@ class ProTraderApp {
 
     updateQuoteDisplay(quote) {
         if (!quote) return;
-        
+
         const priceEl = document.getElementById('currentPrice');
         const changeEl = document.getElementById('priceChange');
-        
+
         if (priceEl) {
             priceEl.textContent = `$${quote.c?.toFixed(2) || '0.00'}`;
         }
-        
+
         if (changeEl) {
             const change = quote.d || 0;
             const changePercent = quote.dp || 0;
             const isPositive = change >= 0;
-            
+
             changeEl.textContent = `${isPositive ? '+' : ''}${change.toFixed(2)} (${isPositive ? '+' : ''}${changePercent.toFixed(2)}%)`;
             changeEl.className = `change ${isPositive ? 'positive' : 'negative'}`;
         }
     }
 
-    async changeTimeframe(timeframe) {
+    async changeTimeFrame(timeframe) {
         this.currentTimeframe = timeframe;
         await this.loadSymbolData(this.currentSymbol);
     }
 
     reapplyIndicators() {
         if (!this.chartManager || !this.chartManager.currentData) return;
-        
+
         // Clear existing indicators
         this.chartManager.clearIndicators();
-        
+
         // Apply active indicators
         this.activeIndicators.forEach(indicator => {
             switch(indicator) {
@@ -276,16 +277,16 @@ class ProTraderApp {
         const conditionSelect = document.getElementById('alertCondition');
         const priceInput = document.getElementById('alertPrice');
         const noteInput = document.getElementById('alertNote');
-        
+
         if (symbolInput && conditionSelect && priceInput && this.alertManager) {
             const symbol = symbolInput.value || this.currentSymbol;
             this.alertManager.createAlert({
                 symbol,
                 condition: conditionSelect.value,
                 price: priceInput.value,
-                note: noteInput?.value || ''
+                notes: noteInput?.value || ''
             });
-            
+
             // Clear form
             if (priceInput) priceInput.value = '';
             if (noteInput) noteInput.value = '';
@@ -296,23 +297,32 @@ class ProTraderApp {
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.tab === tabName);
         });
-        
+
         document.querySelectorAll('.tab-content').forEach(content => {
             content.classList.toggle('active', content.id === `${tabName}-tab`);
         });
     }
 
     startPriceUpdates() {
-        setInterval(async () => {
+        // Clear any existing interval
+        if (this.priceUpdateInterval) {
+            clearInterval(this.priceUpdateInterval);
+        }
+
+        this.priceUpdateInterval = setInterval(async () => {
             try {
                 let quote;
                 try {
                     quote = await this.api.getQuote(this.currentSymbol);
+                    // Validate quote data
+                    if (!quote || quote.c === 0 || quote.c === undefined) {
+                        throw new Error('Invalid quote data');
+                    }
                 } catch (e) {
-                    // Use demo quote on error
-                    quote = DemoDataGenerator.generateQuote(150 + Math.random() * 50);
+                    // Use demo quote on error - pass the symbol correctly
+                    quote = DemoDataGenerator.generateQuote(this.currentSymbol);
                 }
-                
+
                 if (quote) {
                     this.updateQuoteDisplay(quote);
                     if (this.alertManager) {
@@ -320,9 +330,16 @@ class ProTraderApp {
                     }
                 }
             } catch (error) {
-                console.error('Error updating price:', error);
+                console.error('Error updating prices:', error);
             }
         }, CONFIG.UPDATE_INTERVAL);
+    }
+
+    stopPriceUpdates() {
+        if (this.priceUpdateInterval) {
+            clearInterval(this.priceUpdateInterval);
+            this.priceUpdateInterval = null;
+        }
     }
 }
 

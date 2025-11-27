@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="nav-center">
-            <div class="symbol-search">
+            <div class="search-bar">
                 <i class="fas fa-search"></i>
                 <input type="text" id="symbolInput" placeholder="Search AAPL, TSLA, NVDA..." value="AAPL">
                 <button id="searchBtn">Go</button>
@@ -42,117 +42,89 @@
             <!-- Symbol Info Bar -->
             <div class="symbol-info-bar">
                 <div class="symbol-details">
-                    <h1 id="currentSymbol">AAPL</h1>
-                    <span id="companyName">Apple Inc.</span>
+                    <h1 id="current-symbol">AAPL</h1>
+                    <span id="company-name">Apple Inc.</span>
                 </div>
                 <div class="price-info">
-                    <span class="current-price" id="currentPrice">$178.50</span>
-                    <span class="price-change positive" id="priceChange">+2.35 (+1.34%)</span>
+                    <span class="current-price" id="current-price">$178.50</span>
+                    <span class="price-change positive" id="price-change">+2.35 (+1.34%)</span>
                 </div>
-                <div class="quick-stats">
-                    <div class="stat"><span class="label">Vol</span><span class="value" id="statVol">45.2M</span></div>
-                    <div class="stat"><span class="label">High</span><span class="value" id="statHigh">$179.80</span></div>
-                    <div class="stat"><span class="label">Low</span><span class="value" id="statLow">$176.20</span></div>
-                    <div class="stat"><span class="label">Open</span><span class="value" id="statOpen">$177.10</span></div>
+                <div class="stats-bar">
+                    <div class="stat"><span class="label">VOL</span><span class="value" id="stat-vol">55.0M</span></div>
+                    <div class="stat"><span class="label">HIGH</span><span class="value" id="stat-high">$180.25</span></div>
+                    <div class="stat"><span class="label">LOW</span><span class="value" id="stat-low">$176.80</span></div>
+                    <div class="stat"><span class="label">OPEN</span><span class="value" id="stat-open">$177.50</span></div>
                 </div>
             </div>
 
-            <!-- Chart Toolbar -->
-            <div class="chart-toolbar">
+            <!-- Chart Controls -->
+            <div class="chart-controls">
                 <div class="timeframe-buttons">
-                    <button class="tf-btn" data-tf="1m">1m</button>
-                    <button class="tf-btn" data-tf="5m">5m</button>
-                    <button class="tf-btn" data-tf="15m">15m</button>
-                    <button class="tf-btn" data-tf="1H">1H</button>
-                    <button class="tf-btn active" data-tf="1D">1D</button>
-                    <button class="tf-btn" data-tf="1W">1W</button>
-                    <button class="tf-btn" data-tf="1M">1M</button>
+                    <button class="timeframe-btn">1m</button>
+                    <button class="timeframe-btn">5m</button>
+                    <button class="timeframe-btn">15m</button>
+                    <button class="timeframe-btn">1H</button>
+                    <button class="timeframe-btn active">1D</button>
+                    <button class="timeframe-btn">1W</button>
+                    <button class="timeframe-btn">1M</button>
                 </div>
                 <div class="indicator-buttons">
-                    <button class="indicator-toggle" data-indicator="volume"><i class="fas fa-chart-bar"></i> Vol</button>
-                    <button class="indicator-toggle" data-indicator="sma"><i class="fas fa-wave-square"></i> SMA</button>
-                    <button class="indicator-toggle" data-indicator="ema"><i class="fas fa-chart-line"></i> EMA</button>
-                    <button class="indicator-toggle" data-indicator="bb"><i class="fas fa-arrows-alt-v"></i> BB</button>
-                    <button class="indicator-toggle" data-indicator="rsi"><i class="fas fa-tachometer-alt"></i> RSI</button>
-                    <button class="indicator-toggle" data-indicator="macd"><i class="fas fa-signal"></i> MACD</button>
+                    <button class="indicator-btn" data-indicator="Vol"><i class="fas fa-chart-bar"></i> Vol</button>
+                    <button class="indicator-btn" data-indicator="SMA"><i class="fas fa-chart-line"></i> SMA</button>
+                    <button class="indicator-btn" data-indicator="EMA"><i class="fas fa-chart-line"></i> EMA</button>
+                    <button class="indicator-btn" data-indicator="BB"><i class="fas fa-compress-alt"></i> BB</button>
+                    <button class="indicator-btn" data-indicator="RSI"><i class="fas fa-tachometer-alt"></i> RSI</button>
+                    <button class="indicator-btn" data-indicator="MACD"><i class="fas fa-wave-square"></i> MACD</button>
                 </div>
             </div>
 
             <!-- Chart Container -->
-            <div id="chart-container" class="chart-container"></div>
+            <div id="chart-container"></div>
 
-                            <!-- Price Targets Section -->
-                <div id="priceTargets">
-                    <div class="loading">Loading price targets...</div>
+            <!-- AI Trading Agent -->
+            <div class="ai-agent">
+                <div class="agent-header">
+                    <span class="agent-icon">🤖</span>
+                    <span>AI TRADING AGENT</span>
+                    <span class="live-badge">LIVE</span>
                 </div>
+                <div id="ai-signal" class="signal-box">
+                    <div class="signal-content">
+                        <div class="signal-label">SIGNAL</div>
+                        <div class="signal-value buy">BUY</div>
+                        <div class="signal-confidence">Confidence: 78%</div>
+                        <div class="signal-reason">Above SMA20, momentum up</div>
+                    </div>
+                </div>
+            </div>
 
-                            <!-- Extended Hours Section -->
-                <div id="extendedHours">
-                    <div class="loading">Loading extended hours...</div>
-                </div>
-
-                <!-- Daily Game Plan Section -->
-                <div id="gamePlan">
-                    <div class="loading">Loading game plan...</div>
-                </div>
-
-                <!-- News Section -->
-                <div id="newsContainer">
-                    <h3><i class="fas fa-newspaper"></i> Latest News</h3>
-                    <div class="loading">Loading news...</div>
-                </div>
+            <!-- Stock Details Section -->
+            <div id="stock-details" class="stock-details-panel">
+                <!-- Populated by JavaScript -->
+            </div>
         </div>
 
-        <!-- Right Panel -->
-        <div class="right-panel">
-            <!-- Tabs -->
-            <div class="panel-tabs">
-                <button class="panel-tab active" data-panel="watchlist">Watchlist</button>
-                <button class="panel-tab" data-panel="options">Options</button>
-                <button class="panel-tab" data-panel="alerts">Alerts</button>
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-tabs">
+                <button class="active" data-tab="watchlist">Watchlist</button>
+                <button data-tab="options">Options</button>
+                <button data-tab="alerts">Alerts</button>
             </div>
-
-            <!-- Watchlist Content -->
-            <div class="tab-content active" id="watchlist-content">
-                <div class="watchlist-controls">
-                    <input type="text" placeholder="Add symbol..." id="addWatchlistInput">
-                    <button id="addWatchlistBtn"><i class="fas fa-plus"></i></button>
-                </div>
-                <div class="watchlist-items" id="watchlistItems">
-                    <!-- Watchlist items will be rendered here -->
-                </div>
+            <div class="sidebar-header">
+                <input type="text" placeholder="Add symbol..." class="add-symbol-input">
+                <button class="add-symbol-btn">+</button>
             </div>
-
-            <!-- Options Content -->
-            <div class="tab-content" id="options-content">
-                <!-- Options chain will be rendered here -->
+            <div id="sidebar-content" class="sidebar-content">
+                <!-- Populated by JavaScript -->
             </div>
-
-            <!-- Alerts Content -->
-            <div class="tab-content" id="alerts-content">
-                <button class="create-alert-btn" id="createAlertBtn"><i class="fas fa-bell"></i> Create Alert</button>
-                <div class="alerts-list" id="alertsList">
-                    <!-- Alerts will be rendered here -->
-                </div>
-            </div>
-
-            <!-- Positions Section -->
-            <div class="positions-section">
-                <div class="positions-header">
-                    <span>Positions</span>
-                    <span class="pnl positive" id="totalPnl">+$0.00</span>
-                </div>
-                <div class="positions-list" id="positionsList">
-                    <!-- Positions will be rendered here -->
-                </div>
+            <div class="positions-footer">
+                <span>Positions</span>
+                <span class="positions-value">+$0.00</span>
             </div>
         </div>
     </div>
 
-    <!-- Toast Container -->
-    <div class="toast-container" id="toastContainer"></div>
-
-    <!-- Scripts -->
     <script src="js/app.js"></script>
 </body>
 </html>

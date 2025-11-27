@@ -1,7 +1,7 @@
 // ProTrader Platform - Configuration
 const CONFIG = {
     // API Keys - Replace with your own keys from Finnhub
-    FINNHUB_API_KEY: 'YOUR_FINNHUB_API_KEY', // Get free key at https://finnhub.io/
+    FINNHUB_API_KEY: 'd4joes9r01qgcb0uirggd4joes9r01qgcb0uirh0', // Get free key at https://finnhub.io/
     
     // Default Settings
     DEFAULT_SYMBOL: 'AAPL',

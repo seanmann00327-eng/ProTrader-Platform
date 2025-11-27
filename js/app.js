@@ -498,3 +498,75 @@ class ProTraderApp {
     calculateEMA(data, period) { const result = []; const multiplier = 2 / (period + 1); let ema = data[0].close; for (let i = 0; i < data.length; i++) { ema = (data[i].close - ema) * multiplier + ema; result.push({ time: data[i].time, value: ema }); } return result; }
     calculateBollingerBands(data, period, stdDev) { const sma = this.calculateSMA(data, period); const upper = [], lower = []; for (let i = 0; i < sma.length; i++) { const dataIndex = i + period - 1; let sumSquares = 0; for (let j = 0; j < period; j++) { const diff = data[dataIndex - j].close - sma[i].value; sumSquares += diff * diff; } const std = Math.sqrt(sumSquares / period); upper.push({ time: sma[i].time, value: sma[i].value + stdDev * std }); lower.push({ time: sma[i].time, value: sma[i].value - stdDev * std }); } return { upper, lower }; }
     updateIndicatorButtons() { document.querySelectorAll('.indicator-toggle').forEach(btn => { const indicator = btn.dataset.indicator; if (this.activeIndicators.has(indicator)) btn.classList.add('active'); else btn.classList.remove('active'); }); }
+
+
+    // ========== MISC UTILITIES ==========
+    showToast(message, type = 'info') {
+        const existing = document.querySelector('.toast');
+        if (existing) existing.remove();
+        
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => toast.remove(), 3000);
+    }
+    
+    toggleTheme() {
+        document.body.classList.toggle('light-theme');
+        this.showToast('Theme toggled', 'info');
+    }
+    
+    showCreateAlertModal() {
+        this.showToast('Alert creation coming soon', 'info');
+    }
+    
+    renderPositions() {
+        const container = document.getElementById('positionsList');
+        if (!container) return;
+        container.innerHTML = '<div class="empty-state">No open positions</div>';
+    }
+    
+    renderAlerts() {
+        const container = document.getElementById('alertsList');
+        if (!container) return;
+        container.innerHTML = '<div class="empty-state">No active alerts</div>';
+    }
+    
+    startPriceUpdates() {
+        // Update prices every 5 seconds
+        this.priceUpdateInterval = setInterval(() => {
+            this.watchlist.forEach(symbol => {
+                const stockInfo = STOCK_DATA[symbol] || { price: 100 };
+                const currentPrice = this.lastPrices[symbol] || stockInfo.price;
+                const change = (Math.random() - 0.5) * 0.5;
+                this.lastPrices[symbol] = currentPrice + change;
+            });
+            this.renderWatchlist();
+        }, 5000);
+    }
+    
+    updateMarketStatus() {
+        const statusEl = document.getElementById('marketStatusText');
+        if (!statusEl) return;
+        
+        const now = new Date();
+        const day = now.getDay();
+        const hour = now.getHours();
+        
+        const isWeekday = day >= 1 && day <= 5;
+        const isMarketHours = hour >= 9 && hour < 16;
+        
+        statusEl.textContent = (isWeekday && isMarketHours) ? 'Market Open' : 'Market Closed';
+    }
+}
+
+// ========== INITIALIZATION ==========
+window.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded, initializing ProTrader...');
+    window.app = new ProTraderApp();
+    window.app.init().catch(err => {
+        console.error('Failed to initialize:', err);
+    });
+});
